@@ -1,181 +1,268 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState, CSSProperties } from "react";
 import Image from "next/image";
 
+type AffiliateType = {
+  id: number;
+  name: string;
+  logo: string;
+  url: string;
+};
+
+// Custom style type that includes pointerEvents
+type RowStyle = CSSProperties & {
+  pointerEvents: "auto" | "none";
+};
+
+const affiliates: AffiliateType[] = [
+  {
+    id: 1,
+    name: "Dublinbet",
+    logo: "/casino1.svg",
+    url: "https://dublinbet.com",
+  },
+  {
+    id: 2,
+    name: "Casumo",
+    logo: "/casino2.svg",
+    url: "https://www.casumo.com",
+  },
+  {
+    id: 3,
+    name: "Nine Casino",
+    logo: "/casino1.svg",
+    url: "https://www.ninecasino.com",
+  },
+  {
+    id: 4,
+    name: "Wine & Casino",
+    logo: "/casino1.svg",
+    url: "https://wineandcasino.com",
+  },
+  {
+    id: 5,
+    name: "Casumo",
+    logo: "/casino2.svg",
+    url: "https://www.casumo.com",
+  },
+  {
+    id: 6,
+    name: "Dublinbet",
+    logo: "/casino1.svg",
+    url: "https://dublinbet.com",
+  },
+  {
+    id: 7,
+    name: "Nine Casino",
+    logo: "/casino1.svg",
+    url: "https://www.ninecasino.com",
+  },
+  {
+    id: 8,
+    name: "Casumo",
+    logo: "/casino2.svg",
+    url: "https://www.casumo.com",
+  },
+  {
+    id: 9,
+    name: "Wine & Casino",
+    logo: "/casino1.svg",
+    url: "https://wineandcasino.com",
+  },
+];
+
 const AffiliatesSection = () => {
-  const headerRef = useRef<HTMLHeadingElement>(null);
-  const affiliatesRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-slideUp");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (headerRef.current) {
-      observer.observe(headerRef.current);
-    }
-
-    if (affiliatesRef.current) {
-      observer.observe(affiliatesRef.current);
-    }
-
-    return () => {
-      if (headerRef.current) {
-        observer.unobserve(headerRef.current);
-      }
-      if (affiliatesRef.current) {
-        observer.unobserve(affiliatesRef.current);
-      }
-    };
-  }, []);
-
+  // Function to handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent, url: string) => {
     if (e.key === "Enter" || e.key === " ") {
       window.open(url, "_blank", "noopener,noreferrer");
     }
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateScrollPosition = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const scrollPercent =
+          1 - Math.max(0, Math.min(1, rect.top / (window.innerHeight * 0.8)));
+        setScrollPosition(scrollPercent);
+        setViewportHeight(window.innerHeight);
+      }
+    };
+
+    window.addEventListener("scroll", updateScrollPosition);
+    window.addEventListener("resize", updateScrollPosition);
+
+    // Initial update
+    updateScrollPosition();
+
+    return () => {
+      window.removeEventListener("scroll", updateScrollPosition);
+      window.removeEventListener("resize", updateScrollPosition);
+    };
+  }, []);
+
+  // Calculate which row is visible based on scroll position
+  const getRowVisibility = (rowIndex: number) => {
+    // All rows have full opacity when they appear
+    if (scrollPosition < 0.25 && rowIndex > 0) {
+      return 0; // Only first row visible initially
+    }
+
+    if (scrollPosition < 0.7 && rowIndex > 1) {
+      return 0; // First and second row visible until 70% scroll
+    }
+
+    return 1; // Full opacity when visible
+  };
+
+  // Calculate translation and z-index for each row
+  const getRowStyles = (rowIndex: number): RowStyle => {
+    const visibility = getRowVisibility(rowIndex);
+
+    // Base positions - all rows start below the viewport
+    const basePosition = 150; // Start position below viewport (in vh)
+
+    // Each row has a base position where it should end up - adjusted spacing for proper overlap
+    const finalPositions = [0, 30, 60]; // Increased spacing to reduce overlap
+
+    // Calculate transition progress for each row
+    let progress = 0;
+
+    if (rowIndex === 0) {
+      // First row is instantly in position
+      progress = 1;
+    } else if (rowIndex === 1) {
+      // Second row starts moving when scroll is 0.25 and completes at 0.55 (further delayed)
+      progress = Math.max(0, Math.min(1, (scrollPosition - 0.25) / 0.3));
+    } else if (rowIndex === 2) {
+      // Third row starts moving when scroll is 0.7 and completes at 1.0 (further delayed)
+      progress = Math.max(0, Math.min(1, (scrollPosition - 0.7) / 0.3));
+    }
+
+    // Calculate position with smooth easing
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const easedProgress = easeInOutCubic(progress);
+
+    // Lerp between start and end positions
+    const yPosition =
+      basePosition - (basePosition - finalPositions[rowIndex]) * easedProgress;
+
+    // Z-index ensures proper stacking
+    const zIndex = rowIndex * 10;
+
+    return {
+      opacity: visibility,
+      transform: `translateY(${yPosition}vh)`,
+      zIndex,
+      pointerEvents: visibility > 0.5 ? "auto" : "none",
+    };
+  };
+
+  // Render a row of pillars
+  const renderRow = (startIndex: number, rowIndex: number) => {
+    const rowStyles = getRowStyles(rowIndex);
+    const opacityValue = Number(rowStyles.opacity);
+    const isRowActive = !isNaN(opacityValue) && opacityValue > 0.5;
+
+    return (
+      <div
+        className="absolute left-0 right-0 flex justify-center gap-4 md:gap-8 lg:gap-12 transition-all duration-700 ease-in-out"
+        style={rowStyles}
+      >
+        {affiliates
+          .slice(startIndex, startIndex + 3)
+          .map((affiliate, index) => (
+            <div
+              key={affiliate.id}
+              className="relative flex flex-col items-center"
+              style={{
+                transitionDelay: `${index * 200}ms`,
+                transform: isVisible ? "translateY(0)" : "translateY(50px)",
+                opacity: isVisible ? 1 : 0,
+                transition: "transform 0.8s ease-out, opacity 0.8s ease-out",
+              }}
+            >
+              <div className="relative">
+                {/* Pillar image */}
+                <Image
+                  src="/800_stup_1.svg"
+                  alt="Pillar"
+                  width={250}
+                  height={700}
+                  className="w-56 md:w-72 lg:w-80 h-auto"
+                  priority={rowIndex === 0}
+                />
+
+                {/* Plain black rectangle without icons */}
+                <div
+                  className={`absolute top-[12%] left-1/2 -translate-x-1/2 w-[80%] aspect-square  rounded-sm cursor-pointer transition-transform hover:scale-105 ${
+                    isRowActive ? "animate-pulse" : ""
+                  }`}
+                  onClick={() =>
+                    window.open(affiliate.url, "_blank", "noopener,noreferrer")
+                  }
+                  onKeyDown={(e) => handleKeyDown(e, affiliate.url)}
+                  tabIndex={isRowActive ? 0 : -1}
+                  aria-label={`Visit ${affiliate.name}`}
+                >
+                  {/* No content - just empty black squares */}
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+    );
+  };
+
   return (
     <div
-      className="w-full py-12 md:py-16 relative"
-      style={{ background: "linear-gradient(to bottom, #c4261d, #a91e16)" }}
+      ref={sectionRef}
+      className="w-full relative overflow-hidden"
+      style={{
+        background: "linear-gradient(to bottom, #c4261d, #a91e16)",
+        minHeight: "180vh", // Increased space for scrolling
+      }}
     >
       <div className="pattern-bg absolute inset-0 opacity-30"></div>
 
-      {/* Decorative elements */}
-      <div className="absolute left-0 bottom-0 w-full h-full overflow-hidden">
-        <div className="absolute left-[10%] bottom-0 opacity-30 hidden md:block">
-          <Image
-            src="/column.svg"
-            alt="Decorative column"
-            width={30}
-            height={300}
-          />
-        </div>
-        <div className="absolute right-[10%] bottom-0 opacity-30 hidden md:block">
-          <Image
-            src="/column.svg"
-            alt="Decorative column"
-            width={30}
-            height={300}
-          />
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <h2
-          ref={headerRef}
-          className="text-2xl md:text-3xl font-bold text-center text-white mb-12 opacity-0"
-          style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
-        >
+      <div className="container mx-auto px-4 md:px-6 relative z-10 pt-24">
+        <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-24 animate-fadeIn">
           VERIFIED AFFILIATES
         </h2>
 
-        <div
-          ref={affiliatesRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0"
-          style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
-        >
-          {/* Affiliate 1 */}
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex flex-col items-center transition-transform hover:scale-105">
-            <div
-              className="cursor-pointer"
-              onClick={() =>
-                window.open(
-                  "https://dublinbet.com",
-                  "_blank",
-                  "noopener,noreferrer"
-                )
-              }
-              onKeyDown={(e) => handleKeyDown(e, "https://dublinbet.com")}
-              tabIndex={0}
-              aria-label="Visit Dublinbet"
-            >
-              <Image
-                src="/casino1.svg"
-                alt="Dublinbet"
-                width={180}
-                height={60}
-                className="mb-4"
-              />
-            </div>
-            <div className="h-24 flex items-center justify-center">
-              <p className="text-white text-center">
-                Premier online casino offering a wide range of games and
-                bonuses.
-              </p>
-            </div>
-          </div>
-
-          {/* Affiliate 2 */}
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex flex-col items-center transition-transform hover:scale-105">
-            <div
-              className="cursor-pointer"
-              onClick={() =>
-                window.open(
-                  "https://www.casumo.com",
-                  "_blank",
-                  "noopener,noreferrer"
-                )
-              }
-              onKeyDown={(e) => handleKeyDown(e, "https://www.casumo.com")}
-              tabIndex={0}
-              aria-label="Visit Casumo"
-            >
-              <Image
-                src="/casino2.svg"
-                alt="Casumo"
-                width={180}
-                height={60}
-                className="mb-4"
-              />
-            </div>
-            <div className="h-24 flex items-center justify-center">
-              <p className="text-white text-center">
-                Award-winning casino known for innovative gameplay and rewarding
-                promotions.
-              </p>
-            </div>
-          </div>
-
-          {/* Affiliate 3 */}
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex flex-col items-center transition-transform hover:scale-105">
-            <div
-              className="cursor-pointer"
-              onClick={() =>
-                window.open(
-                  "https://www.ninecasino.com",
-                  "_blank",
-                  "noopener,noreferrer"
-                )
-              }
-              onKeyDown={(e) => handleKeyDown(e, "https://www.ninecasino.com")}
-              tabIndex={0}
-              aria-label="Visit Nine Casino"
-            >
-              <Image
-                src="/casino1.svg"
-                alt="Nine Casino"
-                width={180}
-                height={60}
-                className="mb-4"
-              />
-            </div>
-            <div className="h-24 flex items-center justify-center">
-              <p className="text-white text-center">
-                Modern casino platform with excellent user experience and
-                diverse gaming options.
-              </p>
-            </div>
-          </div>
+        <div className="relative h-[140vh]">
+          {renderRow(0, 0)}
+          {renderRow(3, 1)}
+          {renderRow(6, 2)}
         </div>
       </div>
     </div>
