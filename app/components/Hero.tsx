@@ -1,13 +1,10 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { getCurrentUser } from "@/lib/auth";
 
 const Hero = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [user, setUser] = useState<{ username: string } | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -24,14 +21,16 @@ const Hero = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setIsVisible(true);
+          // Section is visible, but we don't need this state anymore
         }
       },
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentRef = sectionRef.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     // Check if user is logged in
@@ -41,8 +40,8 @@ const Hero = () => {
     window.addEventListener("authChange", checkUserStatus);
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
       window.removeEventListener("authChange", checkUserStatus);
     };

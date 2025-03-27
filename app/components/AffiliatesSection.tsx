@@ -75,7 +75,6 @@ const affiliates: AffiliateType[] = [
 const AffiliatesSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
   // Function to handle keyboard navigation
@@ -113,7 +112,6 @@ const AffiliatesSection = () => {
         const scrollPercent =
           1 - Math.max(0, Math.min(1, rect.top / (window.innerHeight * 0.8)));
         setScrollPosition(scrollPercent);
-        setViewportHeight(window.innerHeight);
       }
     };
 

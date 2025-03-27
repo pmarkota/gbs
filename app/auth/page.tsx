@@ -29,7 +29,6 @@ const AuthPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-  const [animateForm, setAnimateForm] = useState(true);
 
   // Login form state
   const [loginForm, setLoginForm] = useState<LoginFormData>({
@@ -45,11 +44,11 @@ const AuthPage = () => {
     confirmPassword: "",
   });
 
-  // Reset animations when mode changes
-  useEffect(() => {
-    setAnimateForm(false);
-    setTimeout(() => setAnimateForm(true), 50);
-  }, [mode]);
+  // Switch between login and register modes
+  const toggleMode = () => {
+    setMode(mode === "login" ? "register" : "login");
+    setErrorMessage("");
+  };
 
   // Handle login form changes
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { User } from "./supabase";
 
 // Token type
 export interface AuthToken {
