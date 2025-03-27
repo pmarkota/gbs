@@ -1,6 +1,6 @@
 "use client";
 
-import {
+import React, {
   useState,
   useEffect,
   useCallback,
@@ -146,7 +146,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     error,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return React.createElement(AuthContext.Provider, { value }, children);
 }
 
 // Hook to use auth context
