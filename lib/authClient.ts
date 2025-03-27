@@ -7,7 +7,7 @@ import React, {
   createContext,
   useContext,
 } from "react";
-import { getToken, saveToken, removeToken, getCurrentUser } from "./auth";
+import { saveToken, removeToken, getCurrentUser } from "./auth";
 import { useRouter } from "next/navigation";
 
 interface AuthUser {
