@@ -71,6 +71,7 @@ const Hero = () => {
             backgroundImage: "url('/4znaka_bez crvene.png')",
             backgroundRepeat: "repeat",
             backgroundSize: "50px", // Smaller pattern size
+            backgroundPosition: "0 0", // Remove any default spacing
             opacity: 0.4, // Lighter opacity
           }}
         ></div>

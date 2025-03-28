@@ -193,7 +193,7 @@ const AffiliatesSection = () => {
 
     return (
       <div
-        className="absolute left-0 right-0 flex justify-center gap-4 md:gap-8 lg:gap-12 transition-all duration-700 ease-in-out"
+        className="absolute left-0 right-0 flex justify-center gap-4 transition-all duration-700 ease-in-out md:gap-8 lg:gap-12"
         style={rowStyles}
       >
         {affiliates
@@ -212,11 +212,11 @@ const AffiliatesSection = () => {
               <div className="relative">
                 {/* Pillar image */}
                 <Image
-                  src="/800_stup_1.svg"
+                  src="/stup_black_1200.svg"
                   alt="Pillar"
                   width={250}
                   height={700}
-                  className="w-56 md:w-72 lg:w-80 h-auto"
+                  className="w-56 h-auto md:w-72 lg:w-80"
                   priority={rowIndex === 0}
                 />
 
@@ -244,16 +244,16 @@ const AffiliatesSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="w-full relative overflow-hidden"
+      className="relative w-full overflow-hidden"
       style={{
         background: "linear-gradient(to bottom, #c4261d, #a91e16)",
         minHeight: "180vh", // Increased space for scrolling
       }}
     >
-      <div className="pattern-bg absolute inset-0 opacity-30"></div>
+      <div className="absolute inset-0 pattern-bg opacity-30"></div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10 pt-24">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-24 animate-fadeIn">
+      <div className="container relative z-10 px-4 pt-24 mx-auto md:px-6">
+        <h2 className="mb-24 text-2xl font-bold text-center text-white md:text-3xl animate-fadeIn">
           VERIFIED AFFILIATES
         </h2>
 
