@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyToken } from "@/lib/auth";
 
 // Helper function to verify admin role
-const verifyAdmin = (request: Request) => {
+const verifyAdmin = (request: NextRequest) => {
   const token = request.headers.get("Authorization")?.split("Bearer ")[1];
   if (!token) {
     return { error: "Unauthorized", status: 401 };
@@ -19,7 +19,7 @@ const verifyAdmin = (request: Request) => {
 
 // GET /api/admin/users/[id] - Get a specific user by ID (admin only)
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -56,7 +56,7 @@ export async function GET(
 
 // PATCH /api/admin/users/[id] - Update a user (admin only)
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -183,7 +183,7 @@ export async function PATCH(
 
 // DELETE /api/admin/users/[id] - Delete a user (admin only)
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

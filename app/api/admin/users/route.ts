@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyToken } from "@/lib/auth";
 
 // GET /api/admin/users - Get all users (admin only)
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     // Verify admin authorization
     const token = request.headers.get("Authorization")?.split("Bearer ")[1];
@@ -63,7 +63,7 @@ export async function GET(request: Request) {
 }
 
 // POST /api/admin/users - Create a new user (admin only)
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     // Verify admin authorization
     const token = request.headers.get("Authorization")?.split("Bearer ")[1];
