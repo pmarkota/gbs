@@ -16,9 +16,7 @@ export interface ToastProps {
   duration?: number;
 }
 
-interface ToasterProps {}
-
-export const Toaster: React.FC<ToasterProps> = () => {
+export const Toaster: React.FC = () => {
   const [toasts, setToasts] = useState<ToastProps[]>([]);
 
   useEffect(() => {
@@ -39,12 +37,12 @@ export const Toaster: React.FC<ToasterProps> = () => {
       }
     };
 
-    // Add event listener
-    document.addEventListener("toast" as any, handleToast);
+    // Add event listener with proper type
+    document.addEventListener("toast", handleToast as EventListener);
 
     // Clean up
     return () => {
-      document.removeEventListener("toast" as any, handleToast);
+      document.removeEventListener("toast", handleToast as EventListener);
     };
   }, []);
 

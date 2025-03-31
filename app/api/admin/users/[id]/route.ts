@@ -113,8 +113,7 @@ export async function PATCH(
         uniqueCheckQuery.eq("email", email);
       }
 
-      const { data: duplicateUser, error: duplicateError } =
-        await uniqueCheckQuery;
+      const { data: duplicateUser } = await uniqueCheckQuery;
 
       if (duplicateUser && duplicateUser.length > 0) {
         return NextResponse.json(
@@ -125,7 +124,7 @@ export async function PATCH(
     }
 
     // Prepare update data
-    const updateData: any = {};
+    const updateData: Record<string, string | number> = {};
     if (username) updateData.username = username;
     if (email) updateData.email = email;
     if (role !== undefined) updateData.role = role;

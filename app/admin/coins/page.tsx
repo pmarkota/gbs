@@ -61,7 +61,6 @@ export default function CoinsPage() {
   const [distribution, setDistribution] = useState<CoinDistribution[]>([]);
   const [topUsers, setTopUsers] = useState<TopUser[]>([]);
   const [recentHistory, setRecentHistory] = useState<CoinHistory[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -399,7 +398,7 @@ export default function CoinsPage() {
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-4">
-              Top user's current coin balance
+              Top user&apos;s current coin balance
             </p>
           </div>
           <div className="bg-gray-700/30 p-4">

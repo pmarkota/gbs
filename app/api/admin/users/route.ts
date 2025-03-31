@@ -127,7 +127,7 @@ export async function POST(request: Request) {
     }
 
     // Create user in users table
-    const { data, error } = await supabaseAdmin.from("users").insert({
+    const { error } = await supabaseAdmin.from("users").insert({
       id: authData.user.id,
       username,
       email,

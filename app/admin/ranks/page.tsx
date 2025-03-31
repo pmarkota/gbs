@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import {
   TrophyIcon,
   ChevronUpIcon,
-  ChevronDownIcon,
   UserIcon,
   ArrowUpIcon,
   ShieldExclamationIcon,
@@ -71,6 +70,8 @@ export default function RanksPage() {
     }
   };
 
+  // Commenting out unused function
+  /* 
   const handleSaveRank = (rank: RankConfig) => {
     // In a real app, this would be an API call to update the rank configuration
     setRankConfigs(rankConfigs.map((r) => (r.level === rank.level ? rank : r)));
@@ -78,6 +79,7 @@ export default function RanksPage() {
     setSelectedRank(null);
     toast.success("Rank settings saved");
   };
+  */
 
   const handlePromoteUsers = async (rankLevel: number) => {
     try {
@@ -245,7 +247,7 @@ export default function RanksPage() {
               </div>
 
               <p className="mt-3 text-sm text-gray-400 italic">
-                "{rank.description}"
+                &quot;{rank.description}&quot;
               </p>
 
               <div className="mt-4">
@@ -391,7 +393,7 @@ export default function RanksPage() {
                     </div>
 
                     <p className="mt-4 text-gray-300 italic">
-                      "{selectedRank.description}"
+                      &quot;{selectedRank.description}&quot;
                     </p>
                   </div>
 
