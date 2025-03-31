@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import { signUp } from "@/lib/supabase";
 import { generateToken } from "@/lib/auth";
 
+// Define an error interface for better typing
+interface AuthError {
+  message: string;
+  code?: string;
+  details?: string;
+  hint?: string;
+  stack?: string;
+}
+
 export async function POST(request: Request) {
   try {
     const { username, email, password } = await request.json();
@@ -57,17 +66,18 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const authError = error as AuthError;
     console.error("Registration error details:", {
-      message: error.message,
-      code: error.code,
-      details: error.details,
-      hint: error.hint,
-      stack: error.stack,
+      message: authError.message,
+      code: authError.code,
+      details: authError.details,
+      hint: authError.hint,
+      stack: authError.stack,
     });
 
     // Handle specific error cases
-    if (error.message.includes("already registered")) {
+    if (authError.message.includes("already registered")) {
       return NextResponse.json(
         { message: "Email is already registered" },
         { status: 409 }
@@ -75,7 +85,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { message: error.message || "Registration failed" },
+      { message: authError.message || "Registration failed" },
       { status: 500 }
     );
   }

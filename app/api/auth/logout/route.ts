@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+// Define an error interface for better typing
+interface AuthError {
+  message: string;
+}
+
 export async function POST() {
   try {
     // Logout from Supabase
@@ -14,11 +19,12 @@ export async function POST() {
       { message: "Logged out successfully" },
       { status: 200 }
     );
-  } catch (error: any) {
-    console.error("Logout error:", error.message);
+  } catch (error: unknown) {
+    const authError = error as AuthError;
+    console.error("Logout error:", authError.message);
 
     return NextResponse.json(
-      { message: error.message || "Logout failed" },
+      { message: authError.message || "Logout failed" },
       { status: 500 }
     );
   }

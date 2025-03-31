@@ -1,19 +1,22 @@
 "use client";
 
-import {
+import React, {
   useState,
   useEffect,
   useCallback,
   createContext,
   useContext,
 } from "react";
-import { getToken, saveToken, removeToken, getCurrentUser } from "./auth";
+import { saveToken, removeToken, getCurrentUser } from "./auth";
 import { useRouter } from "next/navigation";
 
 interface AuthUser {
   id: string;
   email: string;
   username: string;
+  role: string;
+  rank: number;
+  coins: number;
 }
 
 interface AuthContextType {
@@ -146,7 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     error,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return React.createElement(AuthContext.Provider, { value }, children);
 }
 
 // Hook to use auth context

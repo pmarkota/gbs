@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { User } from "./supabase";
 
 // Token type
 export interface AuthToken {
@@ -7,6 +6,9 @@ export interface AuthToken {
     id: string;
     email: string;
     username: string;
+    role: string;
+    rank: number;
+    coins: number;
   };
   exp: number;
   iat: number;
@@ -17,9 +19,19 @@ export function generateToken(user: {
   id: string;
   email: string;
   username: string;
+  role?: string;
+  rank?: number;
+  coins?: number;
 }): string {
   const payload = {
-    user,
+    user: {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      role: user.role || "user",
+      rank: user.rank || 1,
+      coins: user.coins || 100,
+    },
     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
     iat: Math.floor(Date.now() / 1000),
   };
@@ -65,6 +77,9 @@ export const getCurrentUser = (): {
   id: string;
   email: string;
   username: string;
+  role: string;
+  rank: number;
+  coins: number;
 } | null => {
   const token = getToken();
   if (!token) return null;

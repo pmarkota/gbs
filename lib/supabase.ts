@@ -5,6 +5,9 @@ export type User = {
   id: string;
   username: string;
   email: string;
+  role: string;
+  rank: number;
+  coins: number;
   created_at: string;
 };
 
@@ -57,6 +60,7 @@ export async function signUp(
       id: data.user.id,
       username,
       email,
+      // Default values for new fields will be handled by the database
     });
 
     if (profileError) {
@@ -71,7 +75,7 @@ export async function signIn(username: string, password: string) {
   // First get the email using username (with admin to bypass RLS)
   const { data: userData, error: userError } = await supabaseAdmin
     .from("users")
-    .select("email")
+    .select("email, role, rank, coins")
     .eq("username", username)
     .single();
 
@@ -87,6 +91,16 @@ export async function signIn(username: string, password: string) {
 
   if (error) {
     throw error;
+  }
+
+  // Add role, rank, and coins to the user object
+  if (data.user) {
+    data.user.user_metadata = {
+      ...data.user.user_metadata,
+      role: userData.role,
+      rank: userData.rank,
+      coins: userData.coins,
+    };
   }
 
   return data;

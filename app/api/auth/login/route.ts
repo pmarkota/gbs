@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import { signIn } from "@/lib/supabase";
 import { generateToken } from "@/lib/auth";
 
+// Define an error interface for better typing
+interface AuthError {
+  message: string;
+  code?: string;
+  details?: string;
+  hint?: string;
+  stack?: string;
+}
+
 export async function POST(request: Request) {
   try {
     const { username, password } = await request.json();
@@ -26,6 +35,9 @@ export async function POST(request: Request) {
       id: data.user?.id || "",
       email: data.user?.email || "",
       username: data.user?.user_metadata?.username || username,
+      role: data.user?.user_metadata?.role || "user",
+      rank: data.user?.user_metadata?.rank || 1,
+      coins: data.user?.user_metadata?.coins || 100,
     };
 
     const token = generateToken(user);
@@ -40,13 +52,14 @@ export async function POST(request: Request) {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const authError = error as AuthError;
     console.error("Login error details:", {
-      message: error.message,
-      code: error.code,
-      details: error.details,
-      hint: error.hint,
-      stack: error.stack,
+      message: authError.message,
+      code: authError.code,
+      details: authError.details,
+      hint: authError.hint,
+      stack: authError.stack,
     });
 
     return NextResponse.json(

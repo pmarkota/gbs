@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Image from "next/image";
@@ -29,7 +29,6 @@ const AuthPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-  const [animateForm, setAnimateForm] = useState(true);
 
   // Login form state
   const [loginForm, setLoginForm] = useState<LoginFormData>({
@@ -44,12 +43,6 @@ const AuthPage = () => {
     password: "",
     confirmPassword: "",
   });
-
-  // Reset animations when mode changes
-  useEffect(() => {
-    setAnimateForm(false);
-    setTimeout(() => setAnimateForm(true), 50);
-  }, [mode]);
 
   // Handle login form changes
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,9 +156,9 @@ const AuthPage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#1a0805] to-[#3a120a]">
       <Header />
-      <main className="flex-grow pt-24 pb-16 px-4 relative overflow-hidden">
+      <main className="relative flex-grow px-4 pt-24 pb-16 overflow-hidden">
         {/* Background decorative elements */}
-        <div className="absolute left-0 top-0 w-full h-full overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 0.05, scale: 1 }}
@@ -201,7 +194,7 @@ const AuthPage = () => {
         </div>
 
         <motion.div
-          className="container mx-auto max-w-md relative z-10"
+          className="container relative z-10 max-w-md mx-auto"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
@@ -294,7 +287,7 @@ const AuthPage = () => {
             <AnimatePresence>
               {showSuccess && (
                 <motion.div
-                  className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50"
+                  className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -343,7 +336,7 @@ const AuthPage = () => {
                         : "Registration complete"}
                     </motion.p>
                     <motion.p
-                      className="text-white/60 text-sm mt-2"
+                      className="mt-2 text-sm text-white/60"
                       initial={{ y: 10, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.4 }}
@@ -414,7 +407,7 @@ const AuthPage = () => {
                         style={{ caretColor: "#d4af37" }}
                         required
                       />
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none opacity-60">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none opacity-60">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[#d4af37]"
@@ -449,7 +442,7 @@ const AuthPage = () => {
                         style={{ caretColor: "#d4af37" }}
                         required
                       />
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none opacity-60">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none opacity-60">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[#d4af37]"
@@ -476,7 +469,7 @@ const AuthPage = () => {
                     {isLoading ? (
                       <div className="flex items-center justify-center">
                         <svg
-                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
+                          className="w-5 h-5 mr-3 -ml-1 text-black animate-spin"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -535,7 +528,7 @@ const AuthPage = () => {
                         style={{ caretColor: "#d4af37" }}
                         required
                       />
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none opacity-60">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none opacity-60">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[#d4af37]"
@@ -570,7 +563,7 @@ const AuthPage = () => {
                         style={{ caretColor: "#d4af37" }}
                         required
                       />
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none opacity-60">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none opacity-60">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[#d4af37]"
@@ -602,7 +595,7 @@ const AuthPage = () => {
                         style={{ caretColor: "#d4af37" }}
                         required
                       />
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none opacity-60">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none opacity-60">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[#d4af37]"
@@ -637,7 +630,7 @@ const AuthPage = () => {
                         style={{ caretColor: "#d4af37" }}
                         required
                       />
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none opacity-60">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none opacity-60">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 text-[#d4af37]"
@@ -664,7 +657,7 @@ const AuthPage = () => {
                     {isLoading ? (
                       <div className="flex items-center justify-center">
                         <svg
-                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
+                          className="w-5 h-5 mr-3 -ml-1 text-black animate-spin"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -695,7 +688,7 @@ const AuthPage = () => {
 
             {/* Additional information */}
             <motion.div
-              className="mt-8 text-xs text-gray-500 text-center"
+              className="mt-8 text-xs text-center text-gray-500"
               variants={itemVariants}
             >
               <p>
