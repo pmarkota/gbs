@@ -188,6 +188,27 @@ const AffiliatesSection = () => {
     const columns = Array.from({ length: itemsPerRow }, (_, i) => i);
     const rowOffset = 35;
 
+    // Function to get the correct expanded flag image based on column index
+    const getExpandedFlagImage = (columnIndex: number) => {
+      // Use modulo to handle cases where there are more than 5 columns
+      const flagIndex = columnIndex % 5;
+
+      switch (flagIndex) {
+        case 0:
+          return "/gs_zastava-800.png"; // 1st pillar
+        case 1:
+          return "/gs_zastava-800_navy.png"; // 2nd pillar
+        case 2:
+          return "/gs_zastava-800_ljubicasta.png"; // 3rd pillar
+        case 3:
+          return "/gs_zastava-800_nar.png"; // 4th pillar
+        case 4:
+          return "/gs_zastava-800_zelena.png"; // 5th pillar
+        default:
+          return "/gs_zastava-800.png"; // Fallback
+      }
+    };
+
     const calculateVerticalOffset = (rowIndex: number) => {
       if (rowIndex === 0) return 0;
 
@@ -265,7 +286,7 @@ const AffiliatesSection = () => {
                         <Image
                           src={
                             expandedFlags[columnIndex]
-                              ? "/gs_zastava-800.png"
+                              ? getExpandedFlagImage(columnIndex)
                               : "/zatvorena-500.png"
                           }
                           alt="GS Zastava"
@@ -281,6 +302,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-bold text-yellow-300 text-[20px] text-center sm:text-[20px] leading-tight mb-1"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-bold)",
+                                  letterSpacing: "0.03em",
                                 }}
                               >
                                 Welcome offer
@@ -289,6 +311,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-bold text-yellow-300 text-[12px] text-center sm:text-[20px] leading-tight mb-1"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.03em",
                                 }}
                               >
                                 100% up to $500
@@ -297,6 +320,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-0.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Wagering: 30 x DB
@@ -305,6 +329,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-0.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Max bet: 5
@@ -313,6 +338,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs leading-tight mt-0.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Max win: 10 x D
@@ -325,6 +351,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-bold text-yellow-300 text-[13px] text-center sm:text-[20px] leading-tight"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-bold)",
+                                  letterSpacing: "0.03em",
                                 }}
                               >
                                 Welcome offer
@@ -333,6 +360,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-bold text-yellow-300 text-[12px] text-center sm:text-[20px] leading-tight mb-0.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.03em",
                                 }}
                               >
                                 100% up to $500
@@ -341,6 +369,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Wagering: 30 x DB
@@ -349,6 +378,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Max bet: 5
@@ -357,6 +387,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Max win: 10 x D
@@ -366,6 +397,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-1"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Time to wager: 7 days
@@ -374,6 +406,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-italic text-yellow-300 text-[12px] text-center sm:text-xs leading-tight"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-italic)",
+                                  letterSpacing: "0.12em",
                                 }}
                               >
                                 <span className="opacity-90">Casino terms</span>
@@ -382,6 +415,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs mt-1.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Easy verification
@@ -390,6 +424,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Lots of games
@@ -398,6 +433,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs mt-1.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Max win rule
@@ -406,6 +442,7 @@ const AffiliatesSection = () => {
                                 className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
+                                  letterSpacing: "0.02em",
                                 }}
                               >
                                 Max withdraw 500 per day
@@ -440,7 +477,7 @@ const AffiliatesSection = () => {
                     </>
                   )}
                   <Image
-                    src="/stup_2200_goldnovi.svg"
+                    src="/stup_2200.svg"
                     alt={`${affiliate.name} Pillar`}
                     width={300}
                     height={840}
