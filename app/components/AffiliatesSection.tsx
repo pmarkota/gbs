@@ -11,6 +11,7 @@ type AffiliateType = {
 };
 
 const affiliates: AffiliateType[] = [
+  // ... (your affiliates array remains unchanged)
   {
     id: 1,
     name: "Dublinbet",
@@ -106,96 +107,111 @@ const affiliates: AffiliateType[] = [
 const AffiliatesSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [windowWidth, setWindowWidth] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0); // Progress 0 to 1
+  const [expandedFlags, setExpandedFlags] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  // Toggle all flags together
+  const toggleAllFlags = () => {
+    // Check if any flag is expanded
+    const anyExpanded = Object.values(expandedFlags).some((value) => value);
+
+    // Create a new state with all flags set to the opposite of anyExpanded
+    const itemsPerRow = getItemsPerRow();
+    const newExpandedFlags: { [key: number]: boolean } = {};
+
+    for (let i = 0; i < itemsPerRow; i++) {
+      newExpandedFlags[i] = !anyExpanded;
+    }
+
+    setExpandedFlags(newExpandedFlags);
+  };
 
   useEffect(() => {
-    // Set initial window width
-    setWindowWidth(window.innerWidth);
-
-    const handleResize = () => {
+    if (typeof window !== "undefined") {
       setWindowWidth(window.innerWidth);
-    };
-
+    }
+    const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Track scroll position
   useEffect(() => {
     const handleScroll = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
+      if (!sectionRef.current) return;
 
-        // Calculate how far the section is scrolled into view
-        const topOffset = rect.top;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const topOffset = rect.top;
 
-        // Significantly delay animation start - only begin when section is 50% into viewport
-        // End when section is further scrolled (90% of viewport height)
-        let progress =
-          1 -
-          Math.max(
-            0,
-            Math.min(
-              1,
-              (topOffset - viewportHeight * 0.5) / (viewportHeight * 0.4)
-            )
-          );
-        progress = Math.max(0, Math.min(1, progress));
+      let progress = 0;
 
-        setScrollProgress(progress);
+      // Start animation when the top of the section is near the bottom of the viewport.
+      // Adjust this value (e.g., 0.9 for even earlier, 0.6 for later) if needed.
+      const triggerPoint = viewportHeight * 1; //TODO  Changed from 0.5
+
+      // Define the distance over which the animation occurs (e.g., 1 viewport height)
+      const animationDistance = viewportHeight * 1.5;
+
+      if (topOffset < triggerPoint) {
+        // Calculate how far past the trigger point we've scrolled
+        const distancePastTrigger = triggerPoint - topOffset;
+        // Map this distance to a 0-1 progress value over the animationDistance
+        progress = Math.min(
+          1,
+          Math.max(0, distancePastTrigger / animationDistance)
+        );
+      } else {
+        // Ensure progress is 0 before the trigger point
+        progress = 0;
       }
+      // --- END ADJUSTMENT 1 ---
+
+      setScrollProgress(progress);
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Initial calculation
-    handleScroll();
+    handleScroll(); // Initial calculation
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []); // No dependency on scrollProgress needed here
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  // Get number of items per row based on screen size
   const getItemsPerRow = () => {
-    if (windowWidth < 768) {
-      return 2; // Small devices: 2 items
-    } else if (windowWidth < 1024) {
-      return 3; // Medium devices: 3 items
-    } else {
-      return 5; // Large devices: 5 items
-    }
+    if (windowWidth === 0) return 5;
+    if (windowWidth < 768) return 2;
+    if (windowWidth < 1024) return 3;
+    return 5;
   };
 
-  // Render the affiliates grid
   const renderPillarGrid = () => {
     const itemsPerRow = getItemsPerRow();
     const columns = Array.from({ length: itemsPerRow }, (_, i) => i);
+    const rowOffset = 35;
 
-    // Calculate the horizontal offset value for each row
-    const rowOffset = 30; // pixels to shift each row to the right (increased from 15)
-
-    // Vertical animation calculations
     const calculateVerticalOffset = (rowIndex: number) => {
-      if (rowIndex === 0) return 0; // First row stays in place
+      if (rowIndex === 0) return 0;
 
-      // Higher starting positions for even more dramatic movement
-      const startingOffset = rowIndex === 1 ? 250 : 450; // Further increased for later appearance
+      // Define starting and target offsets for the animation
+      const startingOffset = rowIndex === 1 ? 150 : 250; // Initial position
+      const targetOffset = rowIndex === 1 ? -200 : -300; // Final position (MUCH more negative for higher)
 
-      // Slower animation speeds to make animation last longer during scroll
-      const speed = rowIndex === 1 ? 1.4 : 1.2;
+      // Apply an easing function if desired. Example: cubic ease-in-out
+      // easing function: 0 -> 0, 0.5 -> 0.5, 1 -> 1, smooth transition
+      const easeInOutCubic = (t: number) =>
+        t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      const easedProgress = easeInOutCubic(scrollProgress); // Progress 0 to 1
 
-      // Stronger easing for even more delayed initial movement
-      const easedProgress = Math.pow(scrollProgress, 0.6);
+      // Calculate total distance the pillar needs to travel
+      const totalDistance = startingOffset - targetOffset;
 
-      // Calculate how much to move based on scroll progress and speed
-      const moveAmount = startingOffset * easedProgress * speed;
+      // Calculate how much the pillar has moved based on eased progress
+      const moveAmount = totalDistance * easedProgress;
 
-      // Clamp the movement to not exceed the starting offset
-      return Math.max(0, startingOffset - moveAmount);
+      // Calculate the current vertical offset
+      const currentOffset = startingOffset - moveAmount;
+
+      // Return the calculated offset (interpolates from startingOffset to targetOffset)
+      return currentOffset;
     };
 
     return (
@@ -205,35 +221,131 @@ const AffiliatesSection = () => {
             key={`column-${columnIndex}`}
             className="flex flex-col items-center"
           >
-            {/* Each column has 3 pillars stacked vertically with increasing right offset */}
             {[0, 1, 2].map((rowIndex) => {
               const affiliateIndex = rowIndex * itemsPerRow + columnIndex;
               if (affiliateIndex >= affiliates.length) return null;
-
               const affiliate = affiliates[affiliateIndex];
-
-              // Calculate x offset based on row index - static horizontal positioning
               const xOffset = rowIndex * rowOffset;
-
-              // Calculate y offset for animation
               const yOffset = calculateVerticalOffset(rowIndex);
 
               return (
                 <div
                   key={`pillar-${affiliateIndex}`}
-                  className="relative mb-[-75%] last:mb-0" // Even more negative margin for tighter stacking
+                  className="relative mb-[-75%] last:mb-0 w-32 sm:w-48 md:w-56 lg:w-64"
                   style={{
-                    marginLeft: `${xOffset}px`, // Offset each row to the right
-                    transform: `translateY(${yOffset}px)`, // Animate vertical position
-                    transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)", // Adjusted easing for better movement
+                    marginLeft: `${xOffset}px`,
+                    transform: `translateY(${yOffset}px)`,
+                    // Use a slightly longer transition to accommodate smoother easing
+                    transition: "transform 0.6s cubic-bezier(0.65, 0, 0.35, 1)", // Example: Ease-in-out
                   }}
                 >
+                  {rowIndex === 0 && (
+                    <>
+                      {/* Casumo logo above the flag */}
+                      <div className="absolute inset-x-0 top-[-80px] z-10 flex justify-center">
+                        <Image
+                          src="/casumo.png"
+                          alt="Casumo"
+                          width={100}
+                          height={40}
+                          className="w-[80%] h-auto"
+                        />
+                      </div>
+                      <div
+                        className="absolute inset-x-0 top-[9%] z-10 cursor-pointer"
+                        onClick={toggleAllFlags}
+                      >
+                        <Image
+                          src={
+                            expandedFlags[columnIndex]
+                              ? "/gs_zastava-800.png"
+                              : "/zatvorena-500.png"
+                          }
+                          alt="GS Zastava"
+                          width={180}
+                          height={120}
+                          className="w-full h-auto"
+                        />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-1">
+                          {!expandedFlags[columnIndex] ? (
+                            // Basic version
+                            <>
+                              <p className="text-yellow-300 text-[13px] text-center sm:text-[15px] font-bold leading-tight mb-1">
+                                Welcome offer
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-[14px] font-semibold leading-tight mb-1">
+                                100% up to $500
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight mt-0.5">
+                                Wagering: 30 x DB
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight mt-0.5">
+                                Max bet: 5
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight mt-0.5">
+                                Max win: 10 x D
+                              </p>
+                            </>
+                          ) : (
+                            // Expanded version
+                            <>
+                              <p className="text-yellow-300 text-[13px] text-center sm:text-[15px] font-bold leading-tight">
+                                Welcome offer
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-[14px] font-semibold leading-tight mb-0.5">
+                                100% up to $500
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight">
+                                Wagering: 30 x DB
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight">
+                                Max bet: 5
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight">
+                                Max win: 10 x D
+                              </p>
+                              <div className="mt-1 border-t border-yellow-300/40 w-3/4"></div>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight mt-1">
+                                Time to wager: 7 days
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight">
+                                <span className="opacity-90">Casino terms</span>
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold mt-1.5">
+                                Easy verification
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold">
+                                Lots of games
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold mt-1.5">
+                                Max win rule
+                              </p>
+                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold">
+                                Max withdraw 500 per day
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {rowIndex === 1 && (
+                    <div className="absolute inset-x-0 top-[9%] z-10 w-full">
+                      <Image
+                        src="/gs_zastava-06.png"
+                        alt="GS Zastava 06"
+                        width={180}
+                        height={120}
+                        className="w-full h-auto"
+                      />
+                    </div>
+                  )}
                   <Image
-                    src="/stup_black_1200.svg"
+                    src="/stup_2200.svg"
                     alt={`${affiliate.name} Pillar`}
-                    width={250}
-                    height={700}
-                    className="w-28 h-auto sm:w-32 md:w-44 lg:w-48"
+                    width={300}
+                    height={840}
+                    className="w-full h-auto"
                     priority={rowIndex === 0}
                   />
                 </div>
@@ -250,17 +362,27 @@ const AffiliatesSection = () => {
       ref={sectionRef}
       className="relative w-full overflow-hidden py-16 md:py-24"
       style={{
-        background: "linear-gradient(to bottom, #c4261d, #a91e16)",
-        minHeight: "180vh", // Further increased for more scrolling space
+        background:
+          "linear-gradient(135deg, #d4af37 0%, #f9d959 30%, #e6be56 50%, #c5a028 70%, #daa520 100%)",
+        // Keeping the large height is okay, it provides scroll room
+        minHeight: "350vh",
       }}
     >
-      <div className="absolute inset-0 pattern-bg opacity-30"></div>
-
+      {/* Add a subtle grain texture overlay */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage:
+            "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')",
+          mixBlendMode: "overlay",
+        }}
+      />
       <div className="container relative z-10 px-4 mx-auto md:px-6">
-        <h2 className="mb-16 text-2xl font-bold text-center text-white md:text-3xl">
+        <h2 className="mb-16 text-2xl font-bold text-center text-white md:text-3xl lg:text-4xl">
           VERIFIED AFFILIATES
         </h2>
 
+        {/* Ensure grid isn't pushed down excessively by other styles */}
         <div className="relative mt-16 mx-auto">{renderPillarGrid()}</div>
       </div>
     </div>
