@@ -374,8 +374,7 @@ const AffiliatesSection = () => {
       ref={sectionRef}
       className="relative w-full overflow-hidden py-16 md:py-24"
       style={{
-        background:
-          "linear-gradient(135deg, #d4af37 0%, #f9d959 30%, #e6be56 50%, #c5a028 70%, #daa520 100%)",
+        background: "#dd5348",
         // Keeping the large height is okay, it provides scroll room
         minHeight: "350vh",
       }}
