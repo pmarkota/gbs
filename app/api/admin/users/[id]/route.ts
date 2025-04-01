@@ -20,10 +20,10 @@ const verifyAdmin = (request: NextRequest) => {
 // GET /api/admin/users/[id] - Get a specific user by ID (admin only)
 export async function GET(
   request: NextRequest,
-  props: { params: { id: string } }
+  { params: paramsPromise }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const params = props.params;
+    const params = await paramsPromise;
     // Verify admin
     const auth = verifyAdmin(request);
     if (auth.error) {
@@ -58,10 +58,10 @@ export async function GET(
 // PATCH /api/admin/users/[id] - Update a user (admin only)
 export async function PATCH(
   request: NextRequest,
-  props: { params: { id: string } }
+  { params: paramsPromise }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const params = props.params;
+    const params = await paramsPromise;
     // Verify admin
     const auth = verifyAdmin(request);
     if (auth.error) {
@@ -186,10 +186,10 @@ export async function PATCH(
 // DELETE /api/admin/users/[id] - Delete a user (admin only)
 export async function DELETE(
   request: NextRequest,
-  props: { params: { id: string } }
+  { params: paramsPromise }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const params = props.params;
+    const params = await paramsPromise;
     // Verify admin
     const auth = verifyAdmin(request);
     if (auth.error) {
