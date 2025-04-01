@@ -353,7 +353,7 @@ const AffiliatesSection = () => {
                     </>
                   )}
                   <Image
-                    src="/stup_2200.svg"
+                    src="/stup_2200_gold.svg"
                     alt={`${affiliate.name} Pillar`}
                     width={300}
                     height={840}
