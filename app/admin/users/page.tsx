@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   MagnifyingGlassIcon,
   PencilIcon,
@@ -40,11 +40,7 @@ export default function UsersPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchUsers();
-  }, [currentPage, pageSize]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -83,7 +79,11 @@ export default function UsersPage() {
       setIsLoading(false);
       toast.error("Failed to load users");
     }
-  };
+  }, [currentPage, pageSize, searchQuery]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const handleSearch = () => {
     setCurrentPage(1);
