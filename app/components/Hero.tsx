@@ -171,7 +171,7 @@ const Hero = () => {
               </div>
             ) : (
               <Link
-                href="/registration"
+                href="/auth"
                 className="inline-block px-10 py-2 text-xl font-bold text-black transition-colors duration-300 border-2 border-black rounded-full shadow-md bg-primary hover:bg-primary/90"
                 style={{
                   backgroundImage:
