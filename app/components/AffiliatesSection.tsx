@@ -193,19 +193,26 @@ const AffiliatesSection = () => {
 
       // Define starting and target offsets for the animation
       const startingOffset = rowIndex === 1 ? 150 : 250; // Initial position
-      const targetOffset = rowIndex === 1 ? -200 : -300; // Final position (MUCH more negative for higher)
+      const targetOffset = rowIndex === 1 ? -200 : -400; // Row 3 target is now -400 for consistent spacing
 
       // Apply an easing function if desired. Example: cubic ease-in-out
       // easing function: 0 -> 0, 0.5 -> 0.5, 1 -> 1, smooth transition
       const easeInOutCubic = (t: number) =>
         t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      const easedProgress = easeInOutCubic(scrollProgress); // Progress 0 to 1
+      const easedProgress = easeInOutCubic(scrollProgress); // Base progress 0 to 1
+
+      // Adjust progress for rows 2 and 3 to make them start earlier
+      let finalProgress = easedProgress;
+      if (rowIndex > 0) {
+        const speedFactor = 1.2; // Increase factor for earlier start (e.g., 1.1, 1.3)
+        finalProgress = Math.min(1, easedProgress * speedFactor);
+      }
 
       // Calculate total distance the pillar needs to travel
       const totalDistance = startingOffset - targetOffset;
 
-      // Calculate how much the pillar has moved based on eased progress
-      const moveAmount = totalDistance * easedProgress;
+      // Calculate how much the pillar has moved based on adjusted progress
+      const moveAmount = totalDistance * finalProgress;
 
       // Calculate the current vertical offset
       const currentOffset = startingOffset - moveAmount;
@@ -353,7 +360,7 @@ const AffiliatesSection = () => {
                     </>
                   )}
                   <Image
-                    src="/stup_2200_red.svg"
+                    src="/stup_2200_goldnovi.svg"
                     alt={`${affiliate.name} Pillar`}
                     width={300}
                     height={840}
