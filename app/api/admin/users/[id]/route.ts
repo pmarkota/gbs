@@ -18,10 +18,7 @@ const verifyAdmin = (request: NextRequest) => {
 };
 
 // GET /api/admin/users/[id] - Get a specific user by ID (admin only)
-export async function GET(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, context: any) {
   try {
     const { params } = context;
     // Verify admin
@@ -56,10 +53,7 @@ export async function GET(
 }
 
 // PATCH /api/admin/users/[id] - Update a user (admin only)
-export async function PATCH(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
     const { params } = context;
     // Verify admin
@@ -184,10 +178,7 @@ export async function PATCH(
 }
 
 // DELETE /api/admin/users/[id] - Delete a user (admin only)
-export async function DELETE(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
     const { params } = context;
     // Verify admin
