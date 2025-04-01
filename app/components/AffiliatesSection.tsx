@@ -330,15 +330,27 @@ const AffiliatesSection = () => {
                     </>
                   )}
                   {rowIndex === 1 && (
-                    <div className="absolute inset-x-0 top-[9%] z-10 w-full">
-                      <Image
-                        src="/gs_zastava-06.png"
-                        alt="GS Zastava 06"
-                        width={180}
-                        height={120}
-                        className="w-full h-auto"
-                      />
-                    </div>
+                    <>
+                      {/* Casumo logo above the flag - SECOND ROW */}
+                      <div className="absolute inset-x-0 top-[-80px] z-10 flex justify-center">
+                        <Image
+                          src="/casumo.png"
+                          alt="Casumo"
+                          width={100}
+                          height={40}
+                          className="w-[80%] h-auto"
+                        />
+                      </div>
+                      <div className="absolute inset-x-0 top-[9%] z-10 w-full">
+                        <Image
+                          src="/gs_zastava-06.png"
+                          alt="GS Zastava 06"
+                          width={180}
+                          height={120}
+                          className="w-full h-auto"
+                        />
+                      </div>
+                    </>
                   )}
                   <Image
                     src="/stup_2200.svg"
