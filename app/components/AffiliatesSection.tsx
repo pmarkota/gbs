@@ -353,7 +353,7 @@ const AffiliatesSection = () => {
                     </>
                   )}
                   <Image
-                    src="/stup_2200_gold.svg"
+                    src="/stup_2200_red.svg"
                     alt={`${affiliate.name} Pillar`}
                     width={300}
                     height={840}
@@ -374,20 +374,26 @@ const AffiliatesSection = () => {
       ref={sectionRef}
       className="relative w-full overflow-hidden py-16 md:py-24"
       style={{
-        background: "#d42b1d",
+        // Use a red gradient similar to AboutSection's gold one
+        background: "linear-gradient(to bottom right, #a91e16, #d42b1d)",
         // Keeping the large height is okay, it provides scroll room
         minHeight: "350vh",
       }}
     >
-      {/* Add a subtle grain texture overlay */}
+      {/* Pattern overlay (like AboutSection) */}
+      <div className="absolute inset-0 pattern-bg opacity-10 z-0"></div>
+
+      {/* Subtle grain texture overlay (kept from previous) */}
       <div
-        className="absolute inset-0 opacity-10"
+        // Positioned slightly above pattern, below content
+        className="absolute inset-0 opacity-10 z-1"
         style={{
           backgroundImage:
             "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')",
           mixBlendMode: "overlay",
         }}
       />
+      {/* Ensure content is above overlays */}
       <div className="container relative z-10 px-4 mx-auto md:px-6">
         <h2 className="mb-16 text-2xl font-bold text-center text-white md:text-3xl lg:text-4xl">
           VERIFIED AFFILIATES
