@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import {
+  hadriaticRegular,
+  hadriaticBold,
+  hadriaticItalic,
+  hadriaticBoldItalic,
+} from "./fonts";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${hadriaticRegular.variable} ${hadriaticBold.variable} ${hadriaticItalic.variable} ${hadriaticBoldItalic.variable} antialiased`}
       >
         {children}
       </body>

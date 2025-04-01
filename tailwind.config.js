@@ -7,6 +7,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        "hadriatic-regular": ["var(--font-hadriatic-regular)"],
+        "hadriatic-bold": ["var(--font-hadriatic-bold)"],
+        "hadriatic-italic": ["var(--font-hadriatic-italic)"],
+        "hadriatic-bold-italic": ["var(--font-hadriatic-bold-italic)"],
+      },
       animation: {
         fadeIn: "fadeIn 1s ease-out",
         slideUp: "slideUp 0.8s ease-out",

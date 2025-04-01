@@ -277,57 +277,137 @@ const AffiliatesSection = () => {
                           {!expandedFlags[columnIndex] ? (
                             // Basic version
                             <>
-                              <p className="text-yellow-300 text-[13px] text-center sm:text-[15px] font-bold leading-tight mb-1">
+                              <p
+                                className="font-hadriatic-bold text-yellow-300 text-[20px] text-center sm:text-[20px] leading-tight mb-1"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-bold)",
+                                }}
+                              >
                                 Welcome offer
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-[14px] font-semibold leading-tight mb-1">
+                              <p
+                                className="font-hadriatic-bold text-yellow-300 text-[12px] text-center sm:text-[20px] leading-tight mb-1"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 100% up to $500
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight mt-0.5">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-0.5"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Wagering: 30 x DB
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight mt-0.5">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-0.5"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Max bet: 5
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight mt-0.5">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs leading-tight mt-0.5"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Max win: 10 x D
                               </p>
                             </>
                           ) : (
                             // Expanded version
                             <>
-                              <p className="text-yellow-300 text-[13px] text-center sm:text-[15px] font-bold leading-tight">
+                              <p
+                                className="font-hadriatic-bold text-yellow-300 text-[13px] text-center sm:text-[20px] leading-tight"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-bold)",
+                                }}
+                              >
                                 Welcome offer
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-[14px] font-semibold leading-tight mb-0.5">
+                              <p
+                                className="font-hadriatic-bold text-yellow-300 text-[12px] text-center sm:text-[20px] leading-tight mb-0.5"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 100% up to $500
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Wagering: 30 x DB
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Max bet: 5
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Max win: 10 x D
                               </p>
                               <div className="mt-1 border-t border-yellow-300/40 w-3/4"></div>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight mt-1">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-1"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Time to wager: 7 days
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold leading-tight">
+                              <p
+                                className="font-hadriatic-italic text-yellow-300 text-[12px] text-center sm:text-xs leading-tight"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-italic)",
+                                }}
+                              >
                                 <span className="opacity-90">Casino terms</span>
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold mt-1.5">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs mt-1.5"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Easy verification
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Lots of games
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold mt-1.5">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs mt-1.5"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Max win rule
                               </p>
-                              <p className="text-yellow-300 text-[12px] text-center sm:text-xs font-semibold">
+                              <p
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs"
+                                style={{
+                                  fontFamily: "var(--font-hadriatic-regular)",
+                                }}
+                              >
                                 Max withdraw 500 per day
                               </p>
                             </>
