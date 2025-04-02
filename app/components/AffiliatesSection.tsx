@@ -186,7 +186,7 @@ const AffiliatesSection = () => {
   const renderPillarGrid = () => {
     const itemsPerRow = getItemsPerRow();
     const columns = Array.from({ length: itemsPerRow }, (_, i) => i);
-    const rowOffset = 35;
+    const rowOffset = 0;
 
     // Function to get the correct expanded flag image based on column index
     const getExpandedFlagImage = (columnIndex: number) => {
@@ -259,7 +259,7 @@ const AffiliatesSection = () => {
               return (
                 <div
                   key={`pillar-${affiliateIndex}`}
-                  className="relative mb-[-75%] last:mb-0 w-32 sm:w-48 md:w-56 lg:w-64"
+                  className="relative mb-[-75%] last:mb-0 w-44 sm:w-48 md:w-56 lg:w-64"
                   style={{
                     marginLeft: `${xOffset}px`,
                     transform: `translateY(${yOffset}px)`,
@@ -335,7 +335,7 @@ const AffiliatesSection = () => {
                                 Max bet: 5
                               </p>
                               <p
-                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs leading-tight mt-0.5"
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-0.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
                                   letterSpacing: "0.02em",
@@ -403,7 +403,7 @@ const AffiliatesSection = () => {
                                 Time to wager: 7 days
                               </p>
                               <p
-                                className="font-hadriatic-italic text-yellow-300 text-[12px] text-center sm:text-xs leading-tight"
+                                className="font-hadriatic-italic text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-italic)",
                                   letterSpacing: "0.12em",
@@ -412,7 +412,7 @@ const AffiliatesSection = () => {
                                 <span className="opacity-90">Casino terms</span>
                               </p>
                               <p
-                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs mt-1.5"
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-1.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
                                   letterSpacing: "0.02em",
@@ -421,7 +421,7 @@ const AffiliatesSection = () => {
                                 Easy verification
                               </p>
                               <p
-                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs"
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
                                   letterSpacing: "0.02em",
@@ -430,7 +430,7 @@ const AffiliatesSection = () => {
                                 Lots of games
                               </p>
                               <p
-                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs mt-1.5"
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-1.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
                                   letterSpacing: "0.02em",
@@ -439,7 +439,7 @@ const AffiliatesSection = () => {
                                 Max win rule
                               </p>
                               <p
-                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-xs"
+                                className="font-hadriatic-regular text-yellow-300 text-[12px] text-center sm:text-[16px] leading-tight mt-1.5"
                                 style={{
                                   fontFamily: "var(--font-hadriatic-regular)",
                                   letterSpacing: "0.02em",
@@ -477,7 +477,7 @@ const AffiliatesSection = () => {
                     </>
                   )}
                   <Image
-                    src="/stup_2200.svg"
+                    src="/stup_2200_goldnovi.svg"
                     alt={`${affiliate.name} Pillar`}
                     width={300}
                     height={840}
