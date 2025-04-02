@@ -2,6 +2,8 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
+import GradientColorPicker, { GradientDirection } from "./GradientColorPicker";
+import PillarStyleSelector, { PillarStyle } from "./PillarStyleSelector";
 
 type AffiliateType = {
   id: number;
@@ -111,6 +113,33 @@ const AffiliatesSection = () => {
   const [expandedFlags, setExpandedFlags] = useState<{
     [key: number]: boolean;
   }>({});
+
+  // Control states
+  const [showControls, setShowControls] = useState(false);
+  const [fromColor, setFromColor] = useState("#a91e16");
+  const [toColor, setToColor] = useState("#d42b1d");
+  const [direction, setDirection] =
+    useState<GradientDirection>("to bottom right");
+  const [pillarStyle, setPillarStyle] = useState<PillarStyle>("Gold");
+
+  // Get pillar src based on selected style
+  const getPillarSrc = (): string => {
+    switch (pillarStyle) {
+      case "Gold":
+        return "/stup_2200_goldnovi.svg";
+      case "Red":
+        return "/stup_2200_red.svg";
+      case "Black":
+        return "/stup_2200.svg";
+      default:
+        return "/stup_2200_goldnovi.svg";
+    }
+  };
+
+  // Toggle controls visibility
+  const toggleControls = () => {
+    setShowControls(!showControls);
+  };
 
   // Toggle all flags together
   const toggleAllFlags = () => {
@@ -477,7 +506,7 @@ const AffiliatesSection = () => {
                     </>
                   )}
                   <Image
-                    src="/stup_2200_goldnovi.svg"
+                    src={getPillarSrc()}
                     alt={`${affiliate.name} Pillar`}
                     width={300}
                     height={840}
@@ -493,14 +522,17 @@ const AffiliatesSection = () => {
     );
   };
 
+  // The background gradient style
+  const gradientStyle = {
+    background: `linear-gradient(${direction}, ${fromColor}, ${toColor})`,
+  };
+
   return (
     <div
       ref={sectionRef}
       className="relative w-full overflow-hidden py-16 md:py-24"
       style={{
-        // Use a red gradient similar to AboutSection's gold one
-        background: "linear-gradient(to bottom right, #a91e16, #d42b1d)",
-        // Keeping the large height is okay, it provides scroll room
+        ...gradientStyle,
         minHeight: "350vh",
       }}
     >
@@ -517,6 +549,37 @@ const AffiliatesSection = () => {
           mixBlendMode: "overlay",
         }}
       />
+
+      {/* Color control toggle button */}
+      <div className="absolute top-4 right-4 z-40">
+        <button
+          onClick={toggleControls}
+          className="bg-secondary text-white px-3 py-2 rounded-full shadow-lg hover:bg-secondary-dark transition-colors"
+        >
+          {showControls ? "✕" : "🎨"}
+        </button>
+      </div>
+
+      {/* Color control panel */}
+      {showControls && (
+        <div className="absolute top-16 right-4 z-40 w-80 flex flex-col gap-4">
+          <GradientColorPicker
+            fromColor={fromColor}
+            toColor={toColor}
+            direction={direction}
+            onFromColorChange={setFromColor}
+            onToColorChange={setToColor}
+            onDirectionChange={setDirection}
+            showViaColor={false}
+            label="Affiliates Section Background"
+          />
+          <PillarStyleSelector
+            selectedStyle={pillarStyle}
+            onStyleChange={setPillarStyle}
+          />
+        </div>
+      )}
+
       {/* Ensure content is above overlays */}
       <div className="container relative z-10 px-4 mx-auto md:px-6">
         <h2 className="mb-16 text-2xl font-bold text-center text-white md:text-3xl lg:text-4xl">

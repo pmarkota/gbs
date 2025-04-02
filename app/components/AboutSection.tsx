@@ -3,10 +3,19 @@
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import GradientColorPicker, { GradientDirection } from "./GradientColorPicker";
 
 const AboutSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [showControls, setShowControls] = useState(false);
+
+  // Gradient control states
+  const [fromColor, setFromColor] = useState("#d4af37");
+  const [viaColor, setViaColor] = useState("#d4af37");
+  const [toColor, setToColor] = useState("#f1c40f");
+  const [direction, setDirection] =
+    useState<GradientDirection>("to bottom right");
 
   // Define fixed positions for floating shapes to prevent hydration mismatch
   const floatingShapes = [
@@ -104,6 +113,16 @@ const AboutSection = () => {
     },
   };
 
+  // Toggle controls visibility
+  const toggleControls = () => {
+    setShowControls(!showControls);
+  };
+
+  // The background gradient style
+  const gradientStyle = {
+    background: `linear-gradient(${direction}, ${fromColor}, ${viaColor}, ${toColor})`,
+  };
+
   return (
     <motion.div
       ref={sectionRef}
@@ -112,8 +131,8 @@ const AboutSection = () => {
       transition={{ duration: 0.8 }}
       className="w-full py-20 md:py-28 relative overflow-hidden"
     >
-      {/* Gold gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-primary-light z-0"></div>
+      {/* Gradient background */}
+      <div className="absolute inset-0 z-0" style={gradientStyle}></div>
 
       {/* Decorative patterns */}
       <div className="absolute inset-0 pattern-bg opacity-10 z-10"></div>
@@ -172,59 +191,13 @@ const AboutSection = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
+          className="flex justify-center"
         >
-          {/* Our Vision Card */}
-          <motion.div variants={cardVariants} className="relative group">
-            <div className="absolute inset-0 bg-secondary rounded-xl transform rotate-1 opacity-70 group-hover:rotate-2 transition-transform duration-300"></div>
-            <div className="relative bg-secondary rounded-xl p-8 shadow-lg transform group-hover:-rotate-1 transition-transform duration-300 overflow-hidden">
-              {/* Glow effect */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-white rounded-full opacity-5 blur-xl"></div>
-
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6 inline-block shadow-inner">
-                <h3 className="text-2xl font-bold text-white drop-shadow-sm">
-                  OUR VISION
-                </h3>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={
-                  isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-                }
-                transition={{ delay: 0.4, duration: 0.6 }}
-              >
-                <p className="mb-6 text-white/90 text-lg leading-relaxed">
-                  OUR GOAL IS TO BECOME THE LEADING PLATFORM FOR CASINO SLOT
-                  PLAYERS SEEKING TO ENHANCE THEIR SKILLS, MAXIMIZE THEIR
-                  EARNINGS, AND MINIMIZE LOSSES.
-                </p>
-
-                <p className="text-white/90 text-lg leading-relaxed">
-                  WE STRIVE TO CREATE A SUPPORTIVE AND INNOVATIVE COMMUNITY
-                  WHERE PLAYERS CAN ACCESS EXPERT STRATEGIES, WATCH GAMEPLAY
-                  VIDEOS, STREAM PLAY, AND MAKE INFORMED GAMING DECISIONS.
-                </p>
-              </motion.div>
-
-              <motion.div
-                className="mt-6 flex justify-center"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Image
-                  src="/tree.svg"
-                  alt="Decorative element"
-                  width={80}
-                  height={80}
-                  className="opacity-40 drop-shadow-glow"
-                />
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Our Mission Card */}
-          <motion.div variants={cardVariants} className="relative group">
+          {/* Our Mission Card - Only keeping this one */}
+          <motion.div
+            variants={cardVariants}
+            className="relative group max-w-3xl"
+          >
             <div className="absolute inset-0 bg-secondary rounded-xl transform -rotate-1 opacity-70 group-hover:-rotate-2 transition-transform duration-300"></div>
             <div className="relative bg-secondary rounded-xl p-8 shadow-lg transform group-hover:rotate-1 transition-transform duration-300 overflow-hidden">
               {/* Glow effect */}
@@ -274,6 +247,34 @@ const AboutSection = () => {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Color control toggle button */}
+      <div className="absolute top-4 right-4 z-40">
+        <button
+          onClick={toggleControls}
+          className="bg-secondary text-white px-3 py-2 rounded-full shadow-lg hover:bg-secondary-dark transition-colors"
+        >
+          {showControls ? "✕" : "🎨"}
+        </button>
+      </div>
+
+      {/* Color control panel */}
+      {showControls && (
+        <div className="absolute top-16 right-4 z-40 w-80">
+          <GradientColorPicker
+            fromColor={fromColor}
+            viaColor={viaColor}
+            toColor={toColor}
+            direction={direction}
+            onFromColorChange={setFromColor}
+            onViaColorChange={setViaColor}
+            onToColorChange={setToColor}
+            onDirectionChange={setDirection}
+            showViaColor={true}
+            label="About Section Background"
+          />
+        </div>
+      )}
 
       {/* Decorative elements at the bottom */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden h-20 z-10">
