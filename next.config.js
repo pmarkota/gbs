@@ -7,6 +7,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Ensure proper routing
+  output: "standalone",
+  trailingSlash: false,
   // Keep existing image config
   images: {
     remotePatterns: [
@@ -26,6 +29,10 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  // Add build ID to help with caching issues
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
   },
 };
 

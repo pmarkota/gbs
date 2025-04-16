@@ -1,5 +1,11 @@
-# Ignore TypeScript errors
-*.ts
-*.tsx
-tsconfig.json
-next-env.d.ts 
+# Node modules
+node_modules
+
+# Build outputs
+.next
+out
+
+# Keep necessary TypeScript files but tell Vercel to ignore errors
+# Don't ignore actual TypeScript files as they're needed for the app
+# tsconfig.json
+# next-env.d.ts 
