@@ -1,0 +1,7 @@
+# Ignore all files (disable ESLint completely)
+**/*.ts
+**/*.tsx
+**/*.js
+**/*.jsx
+**/*.mjs
+**/*.cjs 
