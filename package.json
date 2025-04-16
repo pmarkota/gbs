@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "NEXT_TYPESCRIPT_IGNORE_TYPECHECK=true TS_NODE_PROJECT=tsconfig.build.json next build --no-lint",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
