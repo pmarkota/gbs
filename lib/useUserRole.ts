@@ -8,6 +8,7 @@ export function useUserRole() {
   return {
     isAdmin: user?.role === "admin",
     isUser: user?.role === "user",
+    isStreamer: user?.role === "streamer",
     role: user?.role,
     hasRole: (role: string) => user?.role === role,
     hasAnyRole: (roles: string[]) =>

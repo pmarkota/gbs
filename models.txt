@@ -2,11 +2,11 @@ create table public.users (
   id uuid not null,
   username text not null,
   email text not null,
-  role text not null default 'user',
-  rank integer not null default 1,
-  coins integer not null default 100,
   created_at timestamp with time zone null default CURRENT_TIMESTAMP,
   updated_at timestamp with time zone null default CURRENT_TIMESTAMP,
+  role text not null default 'user'::text,
+  rank integer not null default 1,
+  coins integer not null default 100,
   constraint users_pkey primary key (id),
   constraint users_email_key unique (email),
   constraint users_username_key unique (username),
@@ -16,3 +16,41 @@ create table public.users (
 create trigger update_users_updated_at BEFORE
 update on users for EACH row
 execute FUNCTION update_modified_column ();
+
+create table public.poll_options (
+  id uuid not null default extensions.uuid_generate_v4 (),
+  poll_id uuid not null,
+  option_text text not null,
+  created_at timestamp with time zone not null default CURRENT_TIMESTAMP,
+  constraint poll_options_pkey primary key (id),
+  constraint poll_options_poll_id_fkey foreign KEY (poll_id) references polls (id) on delete CASCADE
+) TABLESPACE pg_default;
+
+
+create table public.polls (
+  id uuid not null default extensions.uuid_generate_v4 (),
+  title text not null,
+  streamer_id uuid not null,
+  is_active boolean not null default true,
+  created_at timestamp with time zone not null default CURRENT_TIMESTAMP,
+  updated_at timestamp with time zone not null default CURRENT_TIMESTAMP,
+  constraint polls_pkey primary key (id),
+  constraint polls_streamer_id_fkey foreign KEY (streamer_id) references users (id) on delete CASCADE
+) TABLESPACE pg_default;
+
+create trigger update_polls_updated_at BEFORE
+update on polls for EACH row
+execute FUNCTION update_modified_column ();
+
+create table public.votes (
+  id uuid not null default extensions.uuid_generate_v4 (),
+  poll_id uuid not null,
+  option_id uuid not null,
+  user_id uuid not null,
+  created_at timestamp with time zone not null default CURRENT_TIMESTAMP,
+  constraint votes_pkey primary key (id),
+  constraint votes_user_poll_unique unique (user_id, poll_id),
+  constraint votes_option_id_fkey foreign KEY (option_id) references poll_options (id) on delete CASCADE,
+  constraint votes_poll_id_fkey foreign KEY (poll_id) references polls (id) on delete CASCADE,
+  constraint votes_user_id_fkey foreign KEY (user_id) references users (id) on delete CASCADE
+) TABLESPACE pg_default;

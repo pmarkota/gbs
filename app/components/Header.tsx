@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getCurrentUser, removeToken } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheckIcon } from "@heroicons/react/24/outline";
+import { ShieldCheckIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -66,6 +66,7 @@ const Header = () => {
 
   // Check if user is admin
   const isAdmin = user?.role === "admin";
+  const isStreamer = user?.role === "streamer";
 
   return (
     <motion.header
@@ -84,7 +85,7 @@ const Header = () => {
         }`}
       ></div>
 
-      <div className="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center relative z-10">
+      <div className="container relative z-10 flex items-center justify-between px-4 py-3 mx-auto md:px-6">
         {/* Logo section with enhanced animations */}
         <motion.div
           whileHover={{ scale: 1.05 }}
@@ -121,9 +122,9 @@ const Header = () => {
               </div>
             </div>
             <div className="flex flex-col ml-3">
-              <span className="text-white font-bold text-xl tracking-wider">
+              <span className="text-xl font-bold tracking-wider text-white">
                 GAMBLE
-                <span className="text-primary font-semibold">SHIELD</span>
+                <span className="font-semibold text-primary">SHIELD</span>
               </span>
               <motion.div
                 className="h-0.5 bg-primary"
@@ -136,7 +137,7 @@ const Header = () => {
         </motion.div>
 
         {/* Desktop menu with enhanced hover effects */}
-        <nav className="hidden md:flex items-center space-x-3 lg:space-x-8">
+        <nav className="items-center hidden space-x-3 md:flex lg:space-x-8">
           {navItems.map((item) => (
             <motion.div
               key={item.name}
@@ -147,7 +148,7 @@ const Header = () => {
             >
               <Link
                 href={item.path}
-                className="text-white hover:text-primary transition-colors duration-200 py-2 px-3 relative overflow-hidden flex flex-col items-center"
+                className="relative flex flex-col items-center px-3 py-2 overflow-hidden text-white transition-colors duration-200 hover:text-primary"
               >
                 <span className="relative z-10">{item.name}</span>
                 <motion.div
@@ -157,7 +158,7 @@ const Header = () => {
                   transition={{ duration: 0.2 }}
                 />
                 <motion.div
-                  className="absolute inset-0 bg-white/5 rounded-md"
+                  className="absolute inset-0 rounded-md bg-white/5"
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
                   transition={{ duration: 0.2 }}
@@ -166,7 +167,7 @@ const Header = () => {
 
               {/* Glowing dot indicator for current page */}
               <motion.div
-                className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100"
+                className="absolute w-1 h-1 transform -translate-x-1/2 rounded-full opacity-0 -bottom-1 left-1/2 bg-primary group-hover:opacity-100"
                 transition={{ duration: 0.2 }}
                 animate={{
                   boxShadow: [
@@ -189,7 +190,7 @@ const Header = () => {
             >
               <Link
                 href="/admin"
-                className="text-primary hover:text-primary-light transition-colors duration-200 py-2 px-3 relative overflow-hidden flex flex-col items-center"
+                className="relative flex flex-col items-center px-3 py-2 overflow-hidden transition-colors duration-200 text-primary hover:text-primary-light"
               >
                 <span className="relative z-10 flex items-center">
                   <ShieldCheckIcon className="w-5 h-5 mr-1" />
@@ -202,7 +203,7 @@ const Header = () => {
                   transition={{ duration: 0.2 }}
                 />
                 <motion.div
-                  className="absolute inset-0 bg-primary/5 rounded-md"
+                  className="absolute inset-0 rounded-md bg-primary/5"
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
                   transition={{ duration: 0.2 }}
@@ -211,13 +212,58 @@ const Header = () => {
 
               {/* Glowing dot indicator */}
               <motion.div
-                className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100"
+                className="absolute w-1 h-1 transform -translate-x-1/2 rounded-full opacity-0 -bottom-1 left-1/2 bg-primary group-hover:opacity-100"
                 transition={{ duration: 0.2 }}
                 animate={{
                   boxShadow: [
                     "0 0 3px 1px rgba(212, 175, 55, 0.3)",
                     "0 0 5px 2px rgba(212, 175, 55, 0.6)",
                     "0 0 3px 1px rgba(212, 175, 55, 0.3)",
+                  ],
+                }}
+              />
+            </motion.div>
+          )}
+
+          {/* Streamer Dashboard Link - Only visible to streamer users */}
+          {isStreamer && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
+              className="relative group"
+            >
+              <Link
+                href="/streamer"
+                className="relative flex flex-col items-center px-3 py-2 overflow-hidden text-purple-500 transition-colors duration-200 hover:text-purple-400"
+              >
+                <span className="relative z-10 flex items-center">
+                  <VideoCameraIcon className="w-5 h-5 mr-1" />
+                  STREAMER
+                </span>
+                <motion.div
+                  className="absolute bottom-0 left-0 h-[2px] bg-purple-500 rounded-full"
+                  initial={{ width: 0 }}
+                  whileHover={{ width: "100%" }}
+                  transition={{ duration: 0.2 }}
+                />
+                <motion.div
+                  className="absolute inset-0 rounded-md bg-purple-500/5"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </Link>
+
+              {/* Glowing dot indicator */}
+              <motion.div
+                className="absolute w-1 h-1 transform -translate-x-1/2 bg-purple-500 rounded-full opacity-0 -bottom-1 left-1/2 group-hover:opacity-100"
+                transition={{ duration: 0.2 }}
+                animate={{
+                  boxShadow: [
+                    "0 0 3px 1px rgba(128, 90, 213, 0.3)",
+                    "0 0 5px 2px rgba(128, 90, 213, 0.6)",
+                    "0 0 3px 1px rgba(128, 90, 213, 0.3)",
                   ],
                 }}
               />
@@ -232,10 +278,10 @@ const Header = () => {
               <motion.span
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-white text-sm"
+                className="text-sm text-white"
               >
                 Welcome,{" "}
-                <span className="text-primary font-medium">
+                <span className="font-medium text-primary">
                   {user.username}
                 </span>
               </motion.span>
@@ -247,7 +293,7 @@ const Header = () => {
                 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="bg-gradient-to-r from-secondary-dark to-secondary hover:from-secondary hover:to-secondary-dark text-white font-medium py-2 px-6 rounded-md shadow-md relative overflow-hidden"
+                className="relative px-6 py-2 overflow-hidden font-medium text-white rounded-md shadow-md bg-gradient-to-r from-secondary-dark to-secondary hover:from-secondary hover:to-secondary-dark"
                 tabIndex={0}
                 aria-label="Logout"
               >
@@ -285,7 +331,7 @@ const Header = () => {
               />
               <Link
                 href="/auth"
-                className="relative bg-gradient-to-r from-secondary-dark to-secondary hover:from-secondary hover:to-secondary-dark text-white font-medium py-2 px-6 rounded-md block shadow-md overflow-hidden"
+                className="relative block px-6 py-2 overflow-hidden font-medium text-white rounded-md shadow-md bg-gradient-to-r from-secondary-dark to-secondary hover:from-secondary hover:to-secondary-dark"
                 tabIndex={0}
                 aria-label="Login or register"
               >
@@ -309,13 +355,13 @@ const Header = () => {
 
         {/* Mobile menu button with enhanced hamburger animation */}
         <motion.button
-          className="md:hidden relative z-50 w-10 h-10 flex items-center justify-center focus:outline-none"
+          className="relative z-50 flex items-center justify-center w-10 h-10 md:hidden focus:outline-none"
           onClick={handleToggleMenu}
           onKeyDown={handleKeyDown}
           aria-label="Toggle menu"
           tabIndex={0}
         >
-          <div className="relative w-6 h-5 flex flex-col justify-between">
+          <div className="relative flex flex-col justify-between w-6 h-5">
             <motion.div
               animate={
                 isMenuOpen
@@ -359,7 +405,7 @@ const Header = () => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="md:hidden bg-black/95 backdrop-blur-md border-t border-primary/20 overflow-hidden absolute w-full z-40"
+            className="absolute z-40 w-full overflow-hidden border-t md:hidden bg-black/95 backdrop-blur-md border-primary/20"
           >
             <motion.div
               initial={{ opacity: 0 }}
@@ -368,7 +414,7 @@ const Header = () => {
               className="absolute inset-0 pattern-bg opacity-5"
             />
 
-            <div className="container mx-auto px-4 py-6 relative z-10">
+            <div className="container relative z-10 px-4 py-6 mx-auto">
               <div className="flex flex-col space-y-1">
                 {navItems.map((item, i) => (
                   <motion.div
@@ -380,14 +426,14 @@ const Header = () => {
                   >
                     <Link
                       href={item.path}
-                      className="text-white hover:text-primary transition-colors flex items-center py-3 px-2 border-b border-white/10"
+                      className="flex items-center px-2 py-3 text-white transition-colors border-b hover:text-primary border-white/10"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <motion.span
                         initial={{ width: 0 }}
                         animate={{ width: 3 }}
                         transition={{ delay: i * 0.1 + 0.3, duration: 0.2 }}
-                        className="h-5 bg-primary rounded-full mr-3"
+                        className="h-5 mr-3 rounded-full bg-primary"
                       />
                       {item.name}
                     </Link>
@@ -404,7 +450,7 @@ const Header = () => {
                   >
                     <Link
                       href="/admin"
-                      className="text-primary hover:text-primary-light transition-colors flex items-center py-3 px-2 border-b border-white/10"
+                      className="flex items-center px-2 py-3 transition-colors border-b text-primary hover:text-primary-light border-white/10"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <motion.span
@@ -414,23 +460,51 @@ const Header = () => {
                           delay: navItems.length * 0.1 + 0.3,
                           duration: 0.2,
                         }}
-                        className="h-5 bg-primary rounded-full mr-3"
+                        className="h-5 mr-3 rounded-full bg-primary"
                       />
                       <ShieldCheckIcon className="w-5 h-5 mr-1" />
                       ADMIN DASHBOARD
                     </Link>
                   </motion.div>
                 )}
+
+                {/* Streamer Dashboard Link in mobile menu - Only visible to streamer users */}
+                {isStreamer && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navItems.length * 0.1 + 0.3 }}
+                    className="relative overflow-hidden"
+                  >
+                    <Link
+                      href="/streamer"
+                      className="flex items-center px-2 py-3 text-purple-500 transition-colors border-b hover:text-purple-400 border-white/10"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <motion.span
+                        initial={{ width: 0 }}
+                        animate={{ width: 3 }}
+                        transition={{
+                          delay: navItems.length * 0.1 + 0.3,
+                          duration: 0.2,
+                        }}
+                        className="h-5 mr-3 bg-purple-500 rounded-full"
+                      />
+                      <VideoCameraIcon className="w-5 h-5 mr-1" />
+                      STREAMER DASHBOARD
+                    </Link>
+                  </motion.div>
+                )}
               </div>
 
-              <div className="mt-6 pt-4 border-t border-white/10">
+              <div className="pt-4 mt-6 border-t border-white/10">
                 {user ? (
                   <div className="space-y-3">
                     <motion.p
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className="text-white/70 text-sm px-2"
+                      className="px-2 text-sm text-white/70"
                     >
                       Logged in as{" "}
                       <span className="text-primary">{user.username}</span>
@@ -443,7 +517,7 @@ const Header = () => {
                         handleLogout();
                         setIsMenuOpen(false);
                       }}
-                      className="bg-gradient-to-r from-secondary-dark to-secondary text-white w-full font-medium px-4 py-3 rounded-md shadow-md"
+                      className="w-full px-4 py-3 font-medium text-white rounded-md shadow-md bg-gradient-to-r from-secondary-dark to-secondary"
                     >
                       LOGOUT
                     </motion.button>
@@ -456,7 +530,7 @@ const Header = () => {
                   >
                     <Link
                       href="/auth"
-                      className="bg-gradient-to-r from-secondary-dark to-secondary text-white font-medium px-4 py-3 rounded-md block text-center shadow-md"
+                      className="block px-4 py-3 font-medium text-center text-white rounded-md shadow-md bg-gradient-to-r from-secondary-dark to-secondary"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       LOGIN

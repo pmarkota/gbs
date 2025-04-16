@@ -53,11 +53,11 @@ export const Toaster: React.FC = () => {
   const getIcon = (type: ToastProps["type"]) => {
     switch (type) {
       case "success":
-        return <CheckCircleIcon className="h-6 w-6 text-green-500" />;
+        return <CheckCircleIcon className="w-6 h-6 text-green-500" />;
       case "error":
-        return <ExclamationCircleIcon className="h-6 w-6 text-red-500" />;
+        return <ExclamationCircleIcon className="w-6 h-6 text-red-500" />;
       case "info":
-        return <InformationCircleIcon className="h-6 w-6 text-blue-500" />;
+        return <InformationCircleIcon className="w-6 h-6 text-blue-500" />;
     }
   };
 
@@ -80,7 +80,7 @@ export const Toaster: React.FC = () => {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col space-y-2 w-80">
+    <div className="fixed z-50 flex flex-col space-y-2 top-4 right-4 w-80">
       {toasts.map((toast) => (
         <div
           key={toast.id}
@@ -88,7 +88,7 @@ export const Toaster: React.FC = () => {
           role="alert"
         >
           <div className="flex-shrink-0">{getIcon(toast.type)}</div>
-          <div className="flex-1 flex flex-col">
+          <div className="flex flex-col flex-1">
             <div className="font-semibold text-gray-900 dark:text-white">
               {toast.title}
             </div>
@@ -102,7 +102,7 @@ export const Toaster: React.FC = () => {
             onClick={() => removeToast(toast.id)}
             className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
           >
-            <XMarkIcon className="h-5 w-5" />
+            <XMarkIcon className="w-5 h-5" />
           </button>
         </div>
       ))}
