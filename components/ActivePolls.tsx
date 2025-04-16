@@ -40,23 +40,16 @@ export default function ActivePolls() {
   > | null>(null);
 
   useEffect(() => {
-    // Only fetch polls if user is authenticated
     if (!authLoading && user) {
+      // Fetch active polls when user loads
       fetchActivePolls();
+
+      // Set up global polls subscription
       setupGlobalPollsSubscription();
-    } else if (!authLoading && !user) {
-      // Clear polls if not authenticated
-      setPolls([]);
-      setIsLoading(false);
     }
 
+    // Cleanup on unmount
     return () => {
-      // Cleanup subscriptions on unmount
-      Object.values(activeChannels).forEach((channel) => {
-        channel.unsubscribe();
-      });
-
-      // Cleanup global polls subscription
       if (pollsChannel) {
         pollsChannel.unsubscribe();
       }
@@ -375,7 +368,7 @@ export default function ActivePolls() {
       if (data.polls && Array.isArray(data.polls)) {
         // Fetch details for each poll
         const pollDetails = await Promise.all(
-          data.polls.map(async (poll: any) => {
+          data.polls.map(async (poll: { id: string }) => {
             const detail = await fetchPollDetails(poll.id);
             return detail;
           })

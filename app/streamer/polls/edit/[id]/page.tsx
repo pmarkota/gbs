@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/authClient";
 import React from "react";
 import {
-  XMarkIcon,
   PlusIcon,
   TrashIcon,
   ArrowLeftIcon,
@@ -40,15 +39,7 @@ export default function EditPoll({ params }: { params: { id: string } }) {
   const [error, setError] = useState<string | null>(null);
   const [originalPoll, setOriginalPoll] = useState<Poll | null>(null);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push("/login");
-    } else if (user && pollId) {
-      fetchPollDetails();
-    }
-  }, [user, authLoading, pollId]);
-
-  const fetchPollDetails = async () => {
+  const fetchPollDetails = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -78,7 +69,15 @@ export default function EditPoll({ params }: { params: { id: string } }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [pollId]);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/login");
+    } else if (user && pollId) {
+      fetchPollDetails();
+    }
+  }, [user, authLoading, pollId, fetchPollDetails, router]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);

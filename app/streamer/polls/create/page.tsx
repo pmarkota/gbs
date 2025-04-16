@@ -128,7 +128,7 @@ export default function CreatePoll() {
         throw new Error("Failed to create poll");
       }
 
-      const data = await response.json();
+      // Success, but no need to use the response data
       toast.success("Poll created successfully");
       router.push("/streamer/polls");
     } catch (error) {

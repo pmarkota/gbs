@@ -64,8 +64,11 @@ export function BarChart({
   // Pass data to child components
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      // Using type assertion with unknown as intermediary step to avoid TypeScript errors
-      return React.cloneElement(child as React.ReactElement<any>, { data });
+      // Using type assertion that preserves the element's props while adding the data prop
+      return React.cloneElement(
+        child as React.ReactElement<{ data?: ChartDataItem[] }>,
+        { data }
+      );
     }
     return child;
   });

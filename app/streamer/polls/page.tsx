@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/authClient";
 import Link from "next/link";
@@ -42,15 +42,7 @@ export default function PollsPage() {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [isToggling, setIsToggling] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push("/login");
-    } else if (user) {
-      fetchPolls();
-    }
-  }, [user, authLoading, router]);
-
-  const fetchPolls = async () => {
+  const fetchPolls = useCallback(async () => {
     if (isFetching) return;
 
     setIsFetching(true);
@@ -80,16 +72,57 @@ export default function PollsPage() {
       const pollsData = Array.isArray(data) ? data : data.polls || [];
 
       // Need to fetch the details for each poll to get the options and votes
-      const pollDetailsPromises = pollsData.map(async (poll: any) => {
-        try {
-          const detailResponse = await fetch(`/api/polls/${poll.id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+      const pollDetailsPromises = pollsData.map(
+        async (poll: Record<string, unknown>) => {
+          try {
+            const detailResponse = await fetch(`/api/polls/${poll.id}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
 
-          if (!detailResponse.ok) {
-            console.warn(`Failed to fetch details for poll ${poll.id}`);
+            if (!detailResponse.ok) {
+              console.warn(`Failed to fetch details for poll ${poll.id}`);
+              return {
+                ...poll,
+                options: [],
+                is_active:
+                  poll.isActive !== undefined ? poll.isActive : poll.is_active,
+                user_id: poll.streamerId || poll.user_id,
+                created_at: poll.createdAt || poll.created_at,
+                updated_at: poll.updatedAt || poll.updated_at,
+              };
+            }
+
+            const pollDetail = await detailResponse.json();
+            return {
+              id: pollDetail.id,
+              title: pollDetail.title,
+              options: Array.isArray(pollDetail.options)
+                ? pollDetail.options.map(
+                    (option: {
+                      id: string;
+                      text?: string;
+                      option_text?: string;
+                      votes?: number;
+                    }) => ({
+                      id: option.id,
+                      text: option.text || option.option_text,
+                      votes: option.votes || 0,
+                    })
+                  )
+                : [],
+              is_active:
+                pollDetail.isActive !== undefined
+                  ? pollDetail.isActive
+                  : pollDetail.is_active,
+              user_id: pollDetail.streamerId || pollDetail.user_id,
+              created_at: pollDetail.createdAt || pollDetail.created_at,
+              updated_at: pollDetail.updatedAt || pollDetail.updated_at,
+            };
+          } catch (err) {
+            console.error(`Error fetching details for poll ${poll.id}:`, err);
+            // Return the poll with minimal data if fetch fails
             return {
               ...poll,
               options: [],
@@ -100,40 +133,8 @@ export default function PollsPage() {
               updated_at: poll.updatedAt || poll.updated_at,
             };
           }
-
-          const pollDetail = await detailResponse.json();
-          return {
-            id: pollDetail.id,
-            title: pollDetail.title,
-            options: Array.isArray(pollDetail.options)
-              ? pollDetail.options.map((option: any) => ({
-                  id: option.id,
-                  text: option.text || option.option_text,
-                  votes: option.votes || 0,
-                }))
-              : [],
-            is_active:
-              pollDetail.isActive !== undefined
-                ? pollDetail.isActive
-                : pollDetail.is_active,
-            user_id: pollDetail.streamerId || pollDetail.user_id,
-            created_at: pollDetail.createdAt || pollDetail.created_at,
-            updated_at: pollDetail.updatedAt || pollDetail.updated_at,
-          };
-        } catch (err) {
-          console.error(`Error fetching details for poll ${poll.id}:`, err);
-          // Return the poll with minimal data if fetch fails
-          return {
-            ...poll,
-            options: [],
-            is_active:
-              poll.isActive !== undefined ? poll.isActive : poll.is_active,
-            user_id: poll.streamerId || poll.user_id,
-            created_at: poll.createdAt || poll.created_at,
-            updated_at: poll.updatedAt || poll.updated_at,
-          };
         }
-      });
+      );
 
       const pollsWithDetails = await Promise.all(pollDetailsPromises);
 
@@ -151,7 +152,15 @@ export default function PollsPage() {
       setIsLoading(false);
       setIsFetching(false);
     }
-  };
+  }, [user, isFetching]);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/login");
+    } else if (user) {
+      fetchPolls();
+    }
+  }, [user, authLoading, router, fetchPolls]);
 
   const togglePollActive = async (pollId: string) => {
     if (isToggling) return;
@@ -307,7 +316,9 @@ export default function PollsPage() {
           </div>
         ) : polls.length === 0 ? (
           <div className="p-6 py-12 text-center bg-gray-800 rounded-lg">
-            <p className="mb-4 text-gray-400">You don't have any polls yet</p>
+            <p className="mb-4 text-gray-400">
+              You don&apos;t have any polls yet
+            </p>
             <Link
               href="/streamer/polls/create"
               className="inline-flex items-center px-4 py-2 transition-colors bg-purple-600 rounded-md hover:bg-purple-700"
