@@ -8,6 +8,21 @@ const Hero = () => {
   const [user, setUser] = useState<{ username: string } | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
+  // Section background gradient
+  const [gradientFrom, setGradientFrom] = useState("#8B4513"); // Brown
+  const [gradientTo, setGradientTo] = useState("#d42b1d"); // Red
+
+  // About Our Company header gradient
+  const [headerGradientFrom, setHeaderGradientFrom] = useState("#e3b423"); // Darker gold
+  const [headerGradientMiddle, setHeaderGradientMiddle] = useState("#ffcf00"); // Bright gold
+  const [headerGradientTo, setHeaderGradientTo] = useState("#e3b423"); // Darker gold
+
+  // Card colors
+  const [cardBgColor, setCardBgColor] = useState("#800000"); // Darker burgundy to match image
+  const [cardHeaderColor, setCardHeaderColor] = useState("#ffd700"); // Golden yellow to match image
+
+  const [showControls, setShowControls] = useState(false);
+
   const checkUserStatus = () => {
     const currentUser = getCurrentUser();
     if (currentUser) {
@@ -86,7 +101,7 @@ const Hero = () => {
         <div
           className="absolute inset-0 z-20"
           style={{
-            backgroundImage: "url('/homeGS-01.svg')",
+            backgroundImage: "url('/gs_home _72 ppi.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -96,15 +111,7 @@ const Hero = () => {
         {/* Content Container */}
         <div className="container relative z-30 flex flex-col h-full px-4 mx-auto">
           {/* Title text in center */}
-          <div className="absolute left-1/2 top-[20%] transform -translate-x-1/2 text-center max-w-md">
-            <h1 className="text-3xl font-bold text-black md:text-3xl">
-              {user ? "Welcome Back, You!" : "Shield Your Game,"}
-              <br />
-              <span className="block mt-2">
-                {user ? "Ready To Win Today?" : "Boost Your Wins!"}
-              </span>
-            </h1>
-          </div>
+          <div className="absolute left-1/2 top-[20%] transform -translate-x-1/2 text-center max-w-md"></div>
 
           {/* Text content on right side */}
           <div className="absolute top-[10%] right-5 md:right-10 max-w-xs text-right">
@@ -189,53 +196,240 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Full width yellow section with wave top */}
-      <div className="relative w-full pb-16 bg-primary">
-        {/* About Our Company heading */}
-        <div className="container px-4 pt-12 pb-8 mx-auto">
-          <h2 className="text-4xl font-bold text-center text-black">
-            ABOUT OUR COMPANY
-            <div className="h-1 mx-auto mt-2 w-80 bg-black/50"></div>
-          </h2>
+      {/* Full width section with about our company */}
+      <div
+        className="relative w-full pb-16"
+        style={{
+          position: "relative",
+          minHeight: "800px",
+          overflow: "hidden",
+        }}
+      >
+        {/* Base solid color background (absolute lowest z-index) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundColor: "#590000", // Fallback background color
+            zIndex: -100,
+          }}
+        ></div>
+
+        {/* Gradient overlay (positioned behind the image) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(to bottom, ${gradientFrom}, ${gradientTo})`,
+            opacity: 0.5, // Reduced opacity
+            zIndex: -1, // Behind the image
+            mixBlendMode: "multiply", // Different blend mode to prevent color distortion
+          }}
+        ></div>
+
+        {/* Background image without any gradient overlay */}
+        <div
+          className="absolute inset-0 w-screen"
+          style={{
+            backgroundImage: "url('/gs_about our company2.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            zIndex: 1, // Move above the gradient
+            left: 0,
+            right: 0,
+            margin: "0 calc(-50vw + 50%)",
+            width: "100vw",
+            pointerEvents: "none", // Ensures clicks pass through to elements below
+          }}
+        ></div>
+
+        {/* Gold/yellow bar for "ABOUT OUR COMPANY" heading at top of section */}
+        <div
+          className="absolute top-0 left-0 right-0 w-screen"
+          style={{
+            height: "80px", // Thicker bar
+            backgroundImage: `linear-gradient(to bottom, ${headerGradientFrom}, ${headerGradientMiddle}, ${headerGradientFrom})`,
+            zIndex: 3,
+            width: "100vw",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderTop: "2px solid #333",
+            borderBottom: "2px solid #333",
+          }}
+        >
+          <h2 className="text-4xl font-bold text-black">ABOUT OUR COMPANY</h2>
         </div>
 
+        {/* Add spacing after the heading section */}
+        <div className="h-28"></div>
+
         {/* Company info cards */}
-        <div className="container grid grid-cols-1 gap-8 px-4 mx-auto md:grid-cols-2">
+        <div
+          className="container relative grid grid-cols-1 gap-8 px-4 mx-auto md:grid-cols-2"
+          style={{ zIndex: 3, marginTop: "40px", position: "relative" }}
+        >
           {/* Vision Card */}
-          <div className="p-6 rounded-lg shadow-lg bg-secondary">
-            <h3 className="inline-block px-4 py-2 mb-4 text-2xl font-bold text-white rounded bg-secondary/70">
-              OUR VISION
-            </h3>
-            <p className="mb-4 text-white">
-              OUR GOAL IS TO BECOME THE LEADING PLATFORM FOR CASINO SLOT PLAYERS
-              SEEKING TO ENHANCE THEIR SKILLS, MAXIMIZE THEIR EARNINGS, AND
-              MINIMIZE LOSSES.
-            </p>
-            <p className="text-white">
-              WE STRIVE TO CREATE A SUPPORTIVE AND INNOVATIVE COMMUNITY WHERE
-              PLAYERS CAN ACCESS EXPERT STRATEGIES, WATCH GAMEPLAY VIDEOS,
-              STREAM PLAY, AND MAKE INFORMED GAMING DECISIONS.
-            </p>
+          <div
+            className="overflow-hidden rounded-lg shadow-lg"
+            style={{ backgroundColor: cardBgColor }}
+          >
+            {/* Card header with gold/yellow background */}
+            <div
+              className="py-3 font-bold text-black"
+              style={{
+                backgroundColor: cardHeaderColor,
+                borderBottom: "2px solid #333",
+              }}
+            >
+              <h3 className="text-2xl font-bold text-center">OUR VISION</h3>
+            </div>
+            {/* Card content */}
+            <div className="p-6">
+              <p className="mb-4 text-white">
+                OUR GOAL IS TO BECOME THE LEADING PLATFORM FOR CASINO SLOT
+                PLAYERS SEEKING TO ENHANCE THEIR SKILLS, MAXIMIZE THEIR
+                EARNINGS, AND MINIMIZE LOSSES.
+              </p>
+              <p className="text-white">
+                WE STRIVE TO CREATE A SUPPORTIVE AND INNOVATIVE COMMUNITY WHERE
+                PLAYERS CAN ACCESS EXPERT STRATEGIES, WATCH GAMEPLAY VIDEOS,
+                STREAM PLAY, AND MAKE INFORMED GAMING DECISIONS.
+              </p>
+            </div>
           </div>
 
           {/* Mission Card */}
-          <div className="p-6 rounded-lg shadow-lg bg-secondary">
-            <h3 className="inline-block px-4 py-2 mb-4 text-2xl font-bold text-white rounded bg-secondary/70">
-              OUR MISSION
-            </h3>
-            <p className="mb-4 text-white">
-              TO EMPOWER CASINO SLOT PLAYERS WITH THE KNOWLEDGE, TOOLS, AND
-              INSIGHTS THEY NEED TO ENHANCE THEIR GAMEPLAY AND MAXIMIZE THEIR
-              WINNINGS.
-            </p>
-            <p className="text-white">
-              THROUGH EXPERT GUIDANCE, EDUCATIONAL CONTENT, AND ADVANCED
-              GAMEPLAY ANALYSIS, WE HELP PLAYERS MAKE INFORMED DECISIONS,
-              DEVELOP SMARTER GAMING HABITS, AND ENJOY A MORE REWARDING
-              EXPERIENCE.
-            </p>
+          <div
+            className="overflow-hidden rounded-lg shadow-lg"
+            style={{ backgroundColor: cardBgColor }}
+          >
+            {/* Card header with gold/yellow background */}
+            <div
+              className="py-3 font-bold text-black"
+              style={{
+                backgroundColor: cardHeaderColor,
+                borderBottom: "2px solid #333",
+              }}
+            >
+              <h3 className="text-2xl font-bold text-center">OUR MISSION</h3>
+            </div>
+            {/* Card content */}
+            <div className="p-6">
+              <p className="mb-4 text-white">
+                TO EMPOWER CASINO SLOT PLAYERS WITH THE KNOWLEDGE, TOOLS, AND
+                INSIGHTS THEY NEED TO ENHANCE THEIR GAMEPLAY AND MAXIMIZE THEIR
+                WINNINGS.
+              </p>
+              <p className="text-white">
+                THROUGH EXPERT GUIDANCE, EDUCATIONAL CONTENT, AND ADVANCED
+                GAMEPLAY ANALYSIS, WE HELP PLAYERS MAKE INFORMED DECISIONS,
+                DEVELOP SMARTER GAMING HABITS, AND ENJOY A MORE REWARDING
+                EXPERIENCE.
+              </p>
+            </div>
           </div>
         </div>
+
+        {/* Color control toggle button */}
+        <div className="absolute top-16 right-4" style={{ zIndex: 10 }}>
+          <button
+            onClick={() => setShowControls(!showControls)}
+            className="px-3 py-2 text-white transition-colors rounded-full shadow-lg bg-secondary hover:bg-secondary/80"
+          >
+            {showControls ? "✕" : "🎨"}
+          </button>
+        </div>
+
+        {/* Color control panel */}
+        {showControls && (
+          <div className="absolute top-28 right-4 z-10 bg-white p-4 rounded-lg shadow-lg max-h-[80vh] overflow-y-auto">
+            <h4 className="mb-4 font-bold text-center">Color Controls</h4>
+
+            {/* Section Background Gradient */}
+            <div className="pb-4 mb-4 border-b">
+              <h5 className="mb-2 font-bold">Section Background</h5>
+              <div className="flex flex-col gap-3">
+                <div>
+                  <label className="block mb-1 text-sm">From Color:</label>
+                  <input
+                    type="color"
+                    value={gradientFrom}
+                    onChange={(e) => setGradientFrom(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm">To Color:</label>
+                  <input
+                    type="color"
+                    value={gradientTo}
+                    onChange={(e) => setGradientTo(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Header Gradient */}
+            <div className="pb-4 mb-4 border-b">
+              <h5 className="mb-2 font-bold">Header Banner</h5>
+              <div className="flex flex-col gap-3">
+                <div>
+                  <label className="block mb-1 text-sm">Start Color:</label>
+                  <input
+                    type="color"
+                    value={headerGradientFrom}
+                    onChange={(e) => setHeaderGradientFrom(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm">Middle Color:</label>
+                  <input
+                    type="color"
+                    value={headerGradientMiddle}
+                    onChange={(e) => setHeaderGradientMiddle(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm">End Color:</label>
+                  <input
+                    type="color"
+                    value={headerGradientTo}
+                    onChange={(e) => setHeaderGradientTo(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Card Colors */}
+            <div>
+              <h5 className="mb-2 font-bold">Cards</h5>
+              <div className="flex flex-col gap-3">
+                <div>
+                  <label className="block mb-1 text-sm">Card Background:</label>
+                  <input
+                    type="color"
+                    value={cardBgColor}
+                    onChange={(e) => setCardBgColor(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm">Card Header:</label>
+                  <input
+                    type="color"
+                    value={cardHeaderColor}
+                    onChange={(e) => setCardHeaderColor(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
