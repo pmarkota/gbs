@@ -9,13 +9,11 @@ const Hero = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   // Section background gradient
-  const [gradientFrom, setGradientFrom] = useState("#8B4513"); // Brown
-  const [gradientTo, setGradientTo] = useState("#d42b1d"); // Red
+  const [gradientFrom, setGradientFrom] = useState("#b37a42"); // RGB 179, 122, 66
+  const [gradientTo, setGradientTo] = useState("#363636"); // RGB 54, 54, 54
 
-  // About Our Company header gradient
-  const [headerGradientFrom, setHeaderGradientFrom] = useState("#e3b423"); // Darker gold
+  // About Our Company header color
   const [headerGradientMiddle, setHeaderGradientMiddle] = useState("#ffcf00"); // Bright gold
-  const [headerGradientTo, setHeaderGradientTo] = useState("#e3b423"); // Darker gold
 
   // Card colors
   const [cardBgColor, setCardBgColor] = useState("#800000"); // Darker burgundy to match image
@@ -190,23 +188,14 @@ const Hero = () => {
           overflow: "hidden",
         }}
       >
-        {/* Base solid color background (absolute lowest z-index) */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundColor: "#590000", // Fallback background color
-            zIndex: -100,
-          }}
-        ></div>
+        {/* Base solid color background (removing this in favor of single gradient) */}
 
-        {/* Gradient overlay (positioned behind the image) */}
+        {/* Single gradient background that can be controlled */}
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `linear-gradient(to bottom, ${gradientFrom}, ${gradientTo})`,
-            opacity: 0.5, // Reduced opacity
-            zIndex: -1, // Behind the image
-            mixBlendMode: "multiply", // Different blend mode to prevent color distortion
+            zIndex: -1,
           }}
         ></div>
 
@@ -224,6 +213,8 @@ const Hero = () => {
             margin: "0 calc(-50vw + 50%)",
             width: "100vw",
             pointerEvents: "none", // Ensures clicks pass through to elements below
+            // Removed mixBlendMode to prevent blending with gradient
+            opacity: 1, // Full opacity to prevent gradient showing through
           }}
         ></div>
 
@@ -232,7 +223,7 @@ const Hero = () => {
           className="absolute top-0 left-0 right-0 w-screen"
           style={{
             height: "80px", // Thicker bar
-            backgroundImage: `linear-gradient(to bottom, ${headerGradientFrom}, ${headerGradientMiddle}, ${headerGradientFrom})`,
+            backgroundColor: headerGradientMiddle, // Single color instead of gradient
             zIndex: 3,
             width: "100vw",
             display: "flex",
@@ -348,7 +339,7 @@ const Hero = () => {
 
             {/* Section Background Gradient */}
             <div className="pb-4 mb-4 border-b">
-              <h5 className="mb-2 font-bold">Section Background</h5>
+              <h5 className="mb-2 font-bold">Main Background</h5>
               <div className="flex flex-col gap-3">
                 <div>
                   <label className="block mb-1 text-sm">From Color:</label>
@@ -371,34 +362,16 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Header Gradient */}
+            {/* Header Color */}
             <div className="pb-4 mb-4 border-b">
               <h5 className="mb-2 font-bold">Header Banner</h5>
               <div className="flex flex-col gap-3">
                 <div>
-                  <label className="block mb-1 text-sm">Start Color:</label>
-                  <input
-                    type="color"
-                    value={headerGradientFrom}
-                    onChange={(e) => setHeaderGradientFrom(e.target.value)}
-                    className="w-full"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 text-sm">Middle Color:</label>
+                  <label className="block mb-1 text-sm">Header Color:</label>
                   <input
                     type="color"
                     value={headerGradientMiddle}
                     onChange={(e) => setHeaderGradientMiddle(e.target.value)}
-                    className="w-full"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 text-sm">End Color:</label>
-                  <input
-                    type="color"
-                    value={headerGradientTo}
-                    onChange={(e) => setHeaderGradientTo(e.target.value)}
                     className="w-full"
                   />
                 </div>
