@@ -75,9 +75,6 @@ const Hero = () => {
       <div
         ref={sectionRef}
         className="relative w-full min-h-[600px] h-[calc(100vh-150px)] mt-16 overflow-hidden"
-        style={{
-          backgroundColor: "#d42b1d", // Red background
-        }}
       >
         {/* Pattern Repeatable Background */}
         <div
@@ -112,18 +109,6 @@ const Hero = () => {
         <div className="container relative z-30 flex flex-col h-full px-4 mx-auto">
           {/* Title text in center */}
           <div className="absolute left-1/2 top-[20%] transform -translate-x-1/2 text-center max-w-md"></div>
-
-          {/* Text content on right side */}
-          <div className="absolute top-[10%] right-5 md:right-10 max-w-xs text-right">
-            <p className="text-lg font-bold leading-tight text-center text-white md:text-base">
-              With Gamble Shield, you don&apos;t just play — you play better,
-              smarter, and more profitably.
-              <br />
-              <br />
-              Join us today and unlock your true potential in the world of
-              casino slots.
-            </p>
-          </div>
 
           {/* Registration button - styled to match image */}
           <div className="absolute left-1/2 top-[55%] transform -translate-x-1/2">
@@ -270,27 +255,35 @@ const Hero = () => {
         >
           {/* Vision Card */}
           <div
-            className="overflow-hidden rounded-lg shadow-lg"
-            style={{ backgroundColor: cardBgColor }}
+            className="overflow-hidden rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:-translate-y-1 group"
+            style={{
+              background: `linear-gradient(135deg, ${cardBgColor}, rgba(60,0,0,0.9))`,
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
           >
             {/* Card header with gold/yellow background */}
             <div
-              className="py-3 font-bold text-black"
+              className="py-4 font-bold text-black relative overflow-hidden"
               style={{
-                backgroundColor: cardHeaderColor,
-                borderBottom: "2px solid #333",
+                background: `linear-gradient(to right, ${cardHeaderColor}, #e3b423)`,
+                borderBottom: "2px solid rgba(0,0,0,0.3)",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
               }}
             >
-              <h3 className="text-2xl font-bold text-center">OUR VISION</h3>
+              <h3 className="text-2xl font-bold text-center drop-shadow-sm">
+                OUR VISION
+              </h3>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
             </div>
             {/* Card content */}
-            <div className="p-6">
-              <p className="mb-4 text-white">
+            <div className="p-8 relative">
+              <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <p className="mb-6 text-white leading-relaxed relative z-10">
                 OUR GOAL IS TO BECOME THE LEADING PLATFORM FOR CASINO SLOT
                 PLAYERS SEEKING TO ENHANCE THEIR SKILLS, MAXIMIZE THEIR
                 EARNINGS, AND MINIMIZE LOSSES.
               </p>
-              <p className="text-white">
+              <p className="text-white leading-relaxed relative z-10">
                 WE STRIVE TO CREATE A SUPPORTIVE AND INNOVATIVE COMMUNITY WHERE
                 PLAYERS CAN ACCESS EXPERT STRATEGIES, WATCH GAMEPLAY VIDEOS,
                 STREAM PLAY, AND MAKE INFORMED GAMING DECISIONS.
@@ -300,27 +293,35 @@ const Hero = () => {
 
           {/* Mission Card */}
           <div
-            className="overflow-hidden rounded-lg shadow-lg"
-            style={{ backgroundColor: cardBgColor }}
+            className="overflow-hidden rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:-translate-y-1 group"
+            style={{
+              background: `linear-gradient(135deg, ${cardBgColor}, rgba(60,0,0,0.9))`,
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
           >
             {/* Card header with gold/yellow background */}
             <div
-              className="py-3 font-bold text-black"
+              className="py-4 font-bold text-black relative overflow-hidden"
               style={{
-                backgroundColor: cardHeaderColor,
-                borderBottom: "2px solid #333",
+                background: `linear-gradient(to right, ${cardHeaderColor}, #e3b423)`,
+                borderBottom: "2px solid rgba(0,0,0,0.3)",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
               }}
             >
-              <h3 className="text-2xl font-bold text-center">OUR MISSION</h3>
+              <h3 className="text-2xl font-bold text-center drop-shadow-sm">
+                OUR MISSION
+              </h3>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
             </div>
             {/* Card content */}
-            <div className="p-6">
-              <p className="mb-4 text-white">
+            <div className="p-8 relative">
+              <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <p className="mb-6 text-white leading-relaxed relative z-10">
                 TO EMPOWER CASINO SLOT PLAYERS WITH THE KNOWLEDGE, TOOLS, AND
                 INSIGHTS THEY NEED TO ENHANCE THEIR GAMEPLAY AND MAXIMIZE THEIR
                 WINNINGS.
               </p>
-              <p className="text-white">
+              <p className="text-white leading-relaxed relative z-10">
                 THROUGH EXPERT GUIDANCE, EDUCATIONAL CONTENT, AND ADVANCED
                 GAMEPLAY ANALYSIS, WE HELP PLAYERS MAKE INFORMED DECISIONS,
                 DEVELOP SMARTER GAMING HABITS, AND ENJOY A MORE REWARDING

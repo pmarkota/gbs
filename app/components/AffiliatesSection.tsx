@@ -530,7 +530,7 @@ const AffiliatesSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full overflow-hidden py-16 md:py-24"
+      className="relative w-full overflow-hidden py-16 md:py-24 pb-32 md:pb-40"
       style={{
         ...gradientStyle,
         minHeight: "350vh",
@@ -582,12 +582,45 @@ const AffiliatesSection = () => {
 
       {/* Ensure content is above overlays */}
       <div className="container relative z-10 px-4 mx-auto md:px-6">
-        <h2 className="mb-16 text-2xl font-bold text-center text-white md:text-3xl lg:text-4xl">
-          VERIFIED AFFILIATES
-        </h2>
+        <div className="flex justify-center w-full mb-24 md:mb-32">
+          <div className="relative transform transition-transform duration-300 hover:scale-102 hover:-translate-y-1">
+            <h2 className="relative px-10 py-5 text-2xl font-bold text-center text-white md:text-3xl lg:text-4xl bg-gradient-to-r from-red-800 via-rose-600 to-red-800 rounded-xl shadow-[0_15px_35px_rgba(225,29,72,0.5)] border border-rose-300/40 backdrop-blur-md overflow-hidden">
+              <span className="relative z-10 tracking-wider text-shadow-red drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+                VERIFIED AFFILIATES
+              </span>
+              <span className="absolute inset-0 bg-gradient-to-br from-red-500/40 to-rose-500/40 blur-[2px]"></span>
+              <span className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-transparent"></span>
+              {/* Decorative elements */}
+              <span className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-500 rounded-full shadow-[0_0_8px_2px_rgba(250,204,21,0.5)]"></span>
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-500 rounded-full shadow-[0_0_8px_2px_rgba(250,204,21,0.5)]"></span>
+            </h2>
+            {/* Enhanced glow effects */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-red-600/10 via-rose-500/40 to-red-600/10 rounded-xl blur-2xl -z-10 opacity-80 animate-pulse-slow"></div>
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-500/0 via-yellow-500/20 to-yellow-500/0 rounded-xl blur-md -z-10 opacity-90"></div>
+          </div>
+        </div>
+
+        {/* Add keyframes animation for pulse-slow */}
+        <style jsx global>{`
+          @keyframes pulse-slow {
+            0%,
+            100% {
+              opacity: 0.6;
+            }
+            50% {
+              opacity: 0.9;
+            }
+          }
+          .animate-pulse-slow {
+            animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          }
+          .text-shadow-red {
+            text-shadow: 0 0 15px rgba(255, 100, 100, 0.5);
+          }
+        `}</style>
 
         {/* Ensure grid isn't pushed down excessively by other styles */}
-        <div className="relative mt-16 mx-auto">{renderPillarGrid()}</div>
+        <div className="relative mt-24 mx-auto">{renderPillarGrid()}</div>
       </div>
     </div>
   );

@@ -76,7 +76,7 @@ const Header = () => {
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         scrolled
           ? "bg-black/80 backdrop-blur-lg shadow-[0_5px_30px_rgba(212,175,55,0.25)]"
-          : "bg-transparent"
+          : "bg-white shadow-md"
       }`}
     >
       <div
@@ -122,7 +122,11 @@ const Header = () => {
               </div>
             </div>
             <div className="flex flex-col ml-3">
-              <span className="text-xl font-bold tracking-wider text-white">
+              <span
+                className={`text-xl font-bold tracking-wider ${
+                  scrolled ? "text-white" : "text-black"
+                }`}
+              >
                 GAMBLE
                 <span className="font-semibold text-primary">SHIELD</span>
               </span>
@@ -148,7 +152,11 @@ const Header = () => {
             >
               <Link
                 href={item.path}
-                className="relative flex flex-col items-center px-3 py-2 overflow-hidden text-white transition-colors duration-200 hover:text-primary"
+                className={`relative flex flex-col items-center px-3 py-2 overflow-hidden transition-colors duration-200 ${
+                  scrolled
+                    ? "text-white hover:text-primary"
+                    : "text-black hover:text-primary"
+                }`}
               >
                 <span className="relative z-10">{item.name}</span>
                 <motion.div
@@ -158,7 +166,9 @@ const Header = () => {
                   transition={{ duration: 0.2 }}
                 />
                 <motion.div
-                  className="absolute inset-0 rounded-md bg-white/5"
+                  className={`absolute inset-0 rounded-md ${
+                    scrolled ? "bg-white/5" : "bg-primary/5"
+                  }`}
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
                   transition={{ duration: 0.2 }}
@@ -278,7 +288,7 @@ const Header = () => {
               <motion.span
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-sm text-white"
+                className={`text-sm ${scrolled ? "text-white" : "text-black"}`}
               >
                 Welcome,{" "}
                 <span className="font-medium text-primary">
