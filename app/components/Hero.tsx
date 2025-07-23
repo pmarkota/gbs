@@ -72,7 +72,11 @@ const Hero = () => {
       {/* Hero Section */}
       <div
         ref={sectionRef}
-        className="relative w-full min-h-[600px] h-[calc(100vh-150px)] mt-16 overflow-hidden"
+        className="relative w-full min-h-[1200px] h-[112.5vw] mt-16 overflow-hidden"
+        style={{ 
+          maxHeight: 'calc(100vh * 1.5)',
+          backgroundColor: '#c9a338' // Golden color to match the reference image
+        }}
       >
         {/* Pattern Repeatable Background */}
         <div
@@ -84,7 +88,6 @@ const Hero = () => {
 
         <style jsx>{`
           .bg-pattern {
-            background-image: url("/4znaka_bez crvene.png");
             background-repeat: repeat;
             background-size: 48px; /* Set exact size to match image dimensions */
             image-rendering: -webkit-optimize-contrast;
@@ -96,9 +99,9 @@ const Hero = () => {
         <div
           className="absolute inset-0 z-20"
           style={{
-            backgroundImage: "url('/gs_home _72 ppi.png')",
+            backgroundImage: "url('/gs_home_nova-verzija.png')",
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",
           }}
         ></div>
@@ -109,7 +112,7 @@ const Hero = () => {
           <div className="absolute left-1/2 top-[20%] transform -translate-x-1/2 text-center max-w-md"></div>
 
           {/* Registration button - styled to match image */}
-          <div className="absolute left-1/2 top-[55%] transform -translate-x-1/2">
+          <div className="absolute left-1/2 top-[43%] transform -translate-x-1/2">
             {user ? (
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
@@ -179,44 +182,17 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Full width section with about our company */}
+      {/* About section overlaying the bottom of Hero background */}
       <div
-        className="relative w-full pb-16"
+        className="relative w-full pb-4 -mt-[85vh] pt-[45vh]"
         style={{
           position: "relative",
-          minHeight: "800px",
+          minHeight: "400px", // Further reduced height to fit within Hero background
           overflow: "hidden",
+          background: "transparent", // No background so Hero background shows through
+          zIndex: 40,
         }}
       >
-        {/* Base solid color background (removing this in favor of single gradient) */}
-
-        {/* Single gradient background that can be controlled */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, ${gradientFrom}, ${gradientTo})`,
-            zIndex: -1,
-          }}
-        ></div>
-
-        {/* Background image without any gradient overlay */}
-        <div
-          className="absolute inset-0 w-screen"
-          style={{
-            backgroundImage: "url('/gs_about our company2.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            zIndex: 1, // Move above the gradient
-            left: 0,
-            right: 0,
-            margin: "0 calc(-50vw + 50%)",
-            width: "100vw",
-            pointerEvents: "none", // Ensures clicks pass through to elements below
-            // Removed mixBlendMode to prevent blending with gradient
-            opacity: 1, // Full opacity to prevent gradient showing through
-          }}
-        ></div>
 
         {/* Gold/yellow bar for "ABOUT OUR COMPANY" heading at top of section */}
         <div
@@ -236,14 +212,33 @@ const Hero = () => {
           <h2 className="text-4xl font-bold text-black">ABOUT OUR COMPANY</h2>
         </div>
 
-        {/* Add spacing after the heading section */}
-        <div className="h-28"></div>
-
-        {/* Company info cards */}
-        <div
-          className="container relative grid grid-cols-1 gap-8 px-4 mx-auto md:grid-cols-2"
-          style={{ zIndex: 3, marginTop: "40px", position: "relative" }}
-        >
+        {/* Company info cards with pillar images - positioned right below header */}
+        <div className="relative w-full" style={{ zIndex: 3 }}>
+          {/* Left pillar image */}
+          <div className="absolute left-0 top-6 z-10">
+            <img
+              src="/gs_stup-aoc.png"
+              alt="Left pillar"
+              className="h-auto w-24 md:w-32"
+              style={{ maxHeight: "300px" }}
+            />
+          </div>
+          
+          {/* Right pillar image (flipped) */}
+          <div className="absolute right-0 top-6 z-10">
+            <img
+              src="/gs_stup-aoc.png"
+              alt="Right pillar"
+              className="h-auto w-24 md:w-32"
+              style={{ maxHeight: "300px", transform: "scaleX(-1)" }}
+            />
+          </div>
+          
+          {/* Cards container - wider and moved up more */}
+          <div
+            className="container relative grid grid-cols-1 gap-4 px-4 mx-auto md:grid-cols-2 max-w-5xl -mt-36"
+            style={{ zIndex: 3, position: "relative" }}
+          >
           {/* Vision Card */}
           <div
             className="overflow-hidden rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:-translate-y-1 group"
@@ -320,6 +315,7 @@ const Hero = () => {
               </p>
             </div>
           </div>
+        </div>
         </div>
 
         {/* Color control toggle button */}
