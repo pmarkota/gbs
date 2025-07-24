@@ -14,7 +14,7 @@ export default function Home() {
         <main className="flex-grow">
           <Hero />
           <ActivePolls />
-          <AboutSection />
+          {/* <AboutSection /> */}
           <AffiliatesSection />
         </main>
         <Footer />

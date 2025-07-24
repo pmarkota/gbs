@@ -56,11 +56,32 @@ const AuthPage = () => {
     setRegisterForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Force re-render when tab changes to ensure input fields are visible
+  // Force re-render and clear form states when tab changes
   React.useEffect(() => {
-    // This empty effect will trigger a re-render when mode changes
-    // which helps ensure input fields are properly displayed
-  }, [mode]);
+    // Clear any lingering error messages when switching tabs
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage("");
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [mode, errorMessage]);
+
+  // Add a small delay to ensure smooth tab transitions
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
+  
+  const handleModeChange = (newMode: AuthMode) => {
+    if (newMode === mode) return;
+    
+    setIsTransitioning(true);
+    setErrorMessage("");
+    setMode(newMode);
+    
+    // Reset transition state after animation completes
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 300);
+  };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -353,41 +374,42 @@ const AuthPage = () => {
             <motion.div
               className="relative mb-8"
               variants={itemVariants}
-              layout
             >
               <div className="relative flex bg-[#1a0805]/60 rounded-2xl p-1 border border-[#d4af37]/10">
-                {/* Animated Tab Indicator */}
-                <motion.div
-                  className="absolute top-1 bottom-1 bg-gradient-to-r from-[#d4af37]/20 to-[#d4af37]/10 rounded-xl border border-[#d4af37]/30"
-                  animate={{
-                    x: mode === "login" ? 0 : "calc(50% - 2px)",
-                    width: "calc(50% - 2px)"
+                {/* Simplified Tab Indicator */}
+                <div
+                  className="absolute top-1 bottom-1 bg-gradient-to-r from-[#d4af37]/20 to-[#d4af37]/10 rounded-xl border border-[#d4af37]/30 transition-all duration-300 ease-in-out"
+                  style={{
+                    left: mode === "login" ? "4px" : "calc(50% + 2px)",
+                    width: "calc(50% - 6px)",
+                    transform: "translateZ(0)" // Force hardware acceleration
                   }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
                 
                 <motion.button
-                  className={`relative z-10 flex-1 py-4 px-6 font-semibold text-sm transition-all duration-300 rounded-xl ${
+                  className={`relative z-10 flex-1 py-4 px-6 font-semibold text-sm transition-all duration-200 rounded-xl ${
                     mode === "login"
                       ? "text-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
                       : "text-gray-400 hover:text-gray-300"
                   }`}
-                  onClick={() => setMode("login")}
+                  onClick={() => handleModeChange("login")}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  type="button"
                 >
                   <span className="relative z-10">Sign In</span>
                 </motion.button>
                 
                 <motion.button
-                  className={`relative z-10 flex-1 py-4 px-6 font-semibold text-sm transition-all duration-300 rounded-xl ${
+                  className={`relative z-10 flex-1 py-4 px-6 font-semibold text-sm transition-all duration-200 rounded-xl ${
                     mode === "register"
                       ? "text-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
                       : "text-gray-400 hover:text-gray-300"
                   }`}
-                  onClick={() => setMode("register")}
+                  onClick={() => handleModeChange("register")}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  type="button"
                 >
                   <span className="relative z-10">Create Account</span>
                 </motion.button>
@@ -488,15 +510,13 @@ const AuthPage = () => {
               )}
             </AnimatePresence>
 
-            {/* Forms Container - Single AnimatePresence to prevent timing conflicts */}
-            <AnimatePresence mode="wait" initial={false}>
+            {/* Forms Container - Direct rendering without AnimatePresence */}
+            <div className="relative">
               {mode === "login" && (
-                <motion.form
+                <form
                   onSubmit={handleSubmit}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3, type: "tween" }}
+                  className="transition-opacity duration-200 ease-in-out"
+                  style={{ opacity: 1 }}
                   key="login-form"
                 >
                   <motion.div className="mb-6" variants={itemVariants}>
@@ -628,18 +648,15 @@ const AuthPage = () => {
                       )}
                     </div>
                   </motion.button>
-                </motion.form>
+                </form>
               )}
               
               {mode === "register" && (
-                <motion.form
+                <form
                   onSubmit={handleSubmit}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3, type: "tween" }}
+                  className="transition-opacity duration-200 ease-in-out"
+                  style={{ opacity: 1, pointerEvents: "auto" }}
                   key="register-form"
-                  style={{ pointerEvents: "auto" }}
                 >
                   <motion.div className="mb-6" variants={itemVariants}>
                     <motion.label
@@ -853,9 +870,9 @@ const AuthPage = () => {
                       )}
                     </div>
                   </motion.button>
-                </motion.form>
+                </form>
               )}
-            </AnimatePresence>
+            </div>
 
             {/* Modern Footer Section */}
             <motion.div
